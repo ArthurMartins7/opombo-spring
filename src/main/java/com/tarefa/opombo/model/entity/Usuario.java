@@ -1,11 +1,14 @@
 package com.tarefa.opombo.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tarefa.opombo.model.enums.PerfilAcesso;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.validator.constraints.br.CPF;
+
+import java.util.Set;
 
 @Entity
 @Table
@@ -34,4 +37,10 @@ public class Usuario {
     @CPF
     @Column(nullable = false)
     private String cpf;
+
+    @OneToMany(mappedBy = "usuario")
+    private Set<Mensagem> mensagens;
+
+    @ManyToMany(mappedBy = "curtidas")
+    private Set<Mensagem> mensagensCurtidas;
 }
