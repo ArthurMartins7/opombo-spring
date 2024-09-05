@@ -21,15 +21,12 @@ public class Mensagem {
     private LocalDateTime dataHoraCriacao;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
     @ManyToMany
-    private Set<Usuario> like;
-
-    @ManyToMany
     @JoinTable(name = "mensagem_curtida", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_mensagem"))
-    private Set<Mensagem> curtidas;
+    private Set<Usuario> curtidas;
 
 
 }
