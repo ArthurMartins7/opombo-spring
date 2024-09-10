@@ -2,7 +2,6 @@ package com.tarefa.opombo.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.Set;

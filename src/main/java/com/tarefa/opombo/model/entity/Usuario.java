@@ -1,11 +1,9 @@
 package com.tarefa.opombo.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tarefa.opombo.model.enums.PerfilAcesso;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
-import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.util.Set;

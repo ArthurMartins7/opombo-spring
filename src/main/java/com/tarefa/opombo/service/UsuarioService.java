@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -21,7 +20,7 @@ public class UsuarioService {
 
     public Usuario buscarPorId(int id) throws OPomboException {
         return usuarioRepository.findById(id)
-                .orElseThrow(() -> new OPomboException("Carta não encontrada."));
+                .orElseThrow(() -> new OPomboException("Usuário não encontrado."));
     }
 
     public Usuario salvar(Usuario usuario) throws OPomboException {
