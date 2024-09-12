@@ -66,7 +66,7 @@
         </dependency>
 
         <!-- Swagger com OpenAPI
-	     	acessar via :  http://localhost:8080/swagger-ui.html
+	     	acessar via :  http://localhost:8080/opombo/swagger-ui.html
 	     -->
         <dependency>
             <groupId>org.springdoc</groupId>

@@ -43,7 +43,7 @@ public class MensagemController {
     }
 
     @Operation(summary = "Salvar nova mensagem",
-            description = "Adiciona um novo mensagem ao sistema.",
+            description = "Adiciona uma nova mensagem ao sistema.",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Mensagem criada com sucesso",
                             content = @Content(mediaType = "application/json",
@@ -75,6 +75,11 @@ public class MensagemController {
     public ResponseEntity<Void> excluir(@PathVariable String id) {
         mensagemService.excluir(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{idUsuario}/{idMensagem}")
+    public boolean darLike(@PathVariable Integer idUsuario, @PathVariable String idMensagem) throws OPomboException {
+        return mensagemService.darLike(idUsuario, idMensagem);
     }
 
 }
