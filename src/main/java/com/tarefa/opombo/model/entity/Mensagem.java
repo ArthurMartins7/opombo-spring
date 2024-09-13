@@ -21,8 +21,9 @@ public class Mensagem {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @NotBlank
+    @NotBlank()
     @Size(max = 300, message = "O conteúdo da mensagem deve conter no máximo 300 caracteres")
+    @Size(min = 1, message = "O conteúdo da mensagem deve conter pelo menos 1 caractere, desconsiderando os espaços")
     private String texto;
 
     @CreationTimestamp
@@ -40,5 +41,6 @@ public class Mensagem {
 
     private Integer quantidadeLikes;
 
+    private boolean bloqueado;
 
 }

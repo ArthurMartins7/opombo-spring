@@ -50,4 +50,5 @@ public class Usuario {
 
     @ManyToMany(mappedBy = "curtidas", fetch = FetchType.EAGER)
     private Set<Mensagem> mensagensCurtidas;
+
 }

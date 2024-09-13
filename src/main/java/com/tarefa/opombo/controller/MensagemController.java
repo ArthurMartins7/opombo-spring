@@ -81,5 +81,9 @@ public class MensagemController {
     public boolean darLike(@PathVariable Integer idUsuario, @PathVariable String idMensagem) throws OPomboException {
         return mensagemService.darLike(idUsuario, idMensagem);
     }
+    @PostMapping("/{idMensagem}")
+    public String bloquearMensagem(@PathVariable String idMensagem) throws OPomboException {
+        return mensagemService.bloquearMensagem(idMensagem);
+    }
 
 }

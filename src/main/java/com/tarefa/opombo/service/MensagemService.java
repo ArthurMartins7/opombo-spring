@@ -40,6 +40,11 @@ public class MensagemService {
         mensagemRepository.deleteById(id);
     }
 
+    public List<Usuario> buscarUsuariosQueCurtiramAMensagem() {
+
+        return List.of();
+    }
+
     public boolean darLike(Integer idUsuario, String idMensagem) {
         boolean curtiu = false;
 
@@ -59,5 +64,21 @@ public class MensagemService {
         this.mensagemRepository.save(mensagem);
 
         return curtiu;
+    }
+
+    public String bloquearMensagem(String idMensagem) throws OPomboException {
+
+        String resultado;
+
+        Mensagem mensagem = mensagemRepository.findById(idMensagem).get();
+        if (mensagem != null) {
+            mensagem.setBloqueado(true);
+            mensagemRepository.save(mensagem);
+            resultado = "Mensagem bloqueada!";
+        } else {
+            resultado = "A mensagem não foi bloqueada.";
+        }
+
+        return resultado;
     }
 }
