@@ -3,6 +3,7 @@ package com.tarefa.opombo.service;
 import com.tarefa.opombo.exception.OPomboException;
 import com.tarefa.opombo.model.entity.Mensagem;
 import com.tarefa.opombo.model.entity.Usuario;
+import com.tarefa.opombo.model.enums.PerfilAcesso;
 import com.tarefa.opombo.model.repository.MensagemRepository;
 import com.tarefa.opombo.model.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class MensagemService {
@@ -40,9 +42,9 @@ public class MensagemService {
         mensagemRepository.deleteById(id);
     }
 
-    public List<Usuario> buscarUsuariosQueCurtiramAMensagem() {
-
-        return List.of();
+    public List<Usuario> buscarUsuariosQueCurtiramAMensagem(String idMensagem) throws OPomboException {
+        Mensagem mensagem = mensagemRepository.findById(idMensagem).orElseThrow(() -> new OPomboException("Mensagem não encontrada."));
+        return mensagem.getCurtidas();
     }
 
     public boolean darLike(Integer idUsuario, String idMensagem) {
@@ -66,19 +68,30 @@ public class MensagemService {
         return curtiu;
     }
 
-    public String bloquearMensagem(String idMensagem) throws OPomboException {
+    public String bloquearMensagem(String idMensagem, int idUsuario) throws OPomboException {
+        verificarPerfilAcesso(idUsuario);
 
         String resultado;
 
         Mensagem mensagem = mensagemRepository.findById(idMensagem).get();
         if (mensagem != null) {
             mensagem.setBloqueado(true);
-            mensagemRepository.save(mensagem);
+            mensagem.setTexto("**Esse texto está bloqueado.**");
             resultado = "Mensagem bloqueada!";
         } else {
-            resultado = "A mensagem não foi bloqueada.";
+            throw new OPomboException("A mensagem não foi bloqueada");
         }
 
+        mensagemRepository.save(mensagem);
+
         return resultado;
+    }
+
+    public void verificarPerfilAcesso(int idUsuario) throws OPomboException {
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new OPomboException("Usuário não encontrado."));
+
+        if (usuario.getPerfilAcesso() == PerfilAcesso.GERAL) {
+            throw new OPomboException("Você não possui permissão para realizar essa ação.");
+        }
     }
 }

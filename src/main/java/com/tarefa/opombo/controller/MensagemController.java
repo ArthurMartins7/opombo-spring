@@ -2,6 +2,7 @@ package com.tarefa.opombo.controller;
 
 import com.tarefa.opombo.exception.OPomboException;
 import com.tarefa.opombo.model.entity.Mensagem;
+import com.tarefa.opombo.model.entity.Usuario;
 import com.tarefa.opombo.service.MensagemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -9,12 +10,14 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(path = "/api/mensagem")
@@ -77,13 +80,22 @@ public class MensagemController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Buscar usuários que curtiram a mensagem")
+    @GetMapping("/curitdas")
+    public List<Usuario> buscarUsuariosQueCurtiramAMensagem(@RequestParam String IdMensagem) throws OPomboException {
+        return  mensagemService.buscarUsuariosQueCurtiramAMensagem(IdMensagem);
+    }
+
+    @Operation(summary = "Curtir a mensagem", description = "Curte a mensagem ou descurte se o usuário já curtiu.")
     @PostMapping("/{idUsuario}/{idMensagem}")
     public boolean darLike(@PathVariable Integer idUsuario, @PathVariable String idMensagem) throws OPomboException {
         return mensagemService.darLike(idUsuario, idMensagem);
     }
+
+    @Operation(summary = "Bloquear mensagem", description = "Bloqueia a mensagem de um usuário")
     @PostMapping("/{idMensagem}")
-    public String bloquearMensagem(@PathVariable String idMensagem) throws OPomboException {
-        return mensagemService.bloquearMensagem(idMensagem);
+    public String bloquearMensagem(@PathVariable String idMensagem, int idUsuario) throws OPomboException {
+        return mensagemService.bloquearMensagem(idMensagem, idUsuario);
     }
 
 }
