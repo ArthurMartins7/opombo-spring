@@ -6,12 +6,13 @@ import com.tarefa.opombo.model.entity.Usuario;
 import com.tarefa.opombo.model.enums.PerfilAcesso;
 import com.tarefa.opombo.model.repository.MensagemRepository;
 import com.tarefa.opombo.model.repository.UsuarioRepository;
-import jakarta.transaction.Transactional;
+import com.tarefa.opombo.model.seletor.MensagemSeletor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class MensagemService {
@@ -22,8 +23,25 @@ public class MensagemService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+
+    public List<Mensagem> buscarComSeletor(MensagemSeletor mensagemSeletor) {
+        if (mensagemSeletor.temPaginacao()) {
+            int numeroPagina = mensagemSeletor.getPagina();
+            int tamanhoPagina = mensagemSeletor.getLimite();
+
+            PageRequest pagina = PageRequest.of(numeroPagina - 1, tamanhoPagina, Sort.by(Sort.Direction.DESC, "dataHoraCriacao"));
+            return mensagemRepository.findAll(mensagemSeletor, pagina).toList();
+        }
+
+        return mensagemRepository.findAll(mensagemSeletor, Sort.by(Sort.Direction.DESC, "dataHoraCriacao"));
+    }
+
+    public int contarPaginas(MensagemSeletor mensagemSeletor) {
+        return (int) mensagemRepository.count(mensagemSeletor);
+    }
+
     public List<Mensagem> buscarTodos() {
-        return mensagemRepository.findAll();
+        return mensagemRepository.findAll(Sort.by(Sort.Direction.DESC, "dataHoraCriacao"));
     }
 
     public Mensagem buscarPorId(String id) throws OPomboException {

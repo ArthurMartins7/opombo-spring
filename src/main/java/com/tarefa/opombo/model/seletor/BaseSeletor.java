@@ -6,6 +6,7 @@ import jakarta.persistence.criteria.Root;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -39,7 +40,7 @@ public class BaseSeletor {
 
     public static void aplicarFiltroPeriodo(Root root,
                                             CriteriaBuilder cb, List<Predicate> predicates,
-                                            LocalDate dataInicial, LocalDate dataFinal, String nomeAtributo) {
+                                            LocalDateTime dataInicial, LocalDateTime dataFinal, String nomeAtributo) {
         if (dataInicial != null && dataFinal != null) {
             //WHERE atributo BETWEEN min AND max
             predicates.add(cb.between(root.get(nomeAtributo), dataInicial, dataFinal));

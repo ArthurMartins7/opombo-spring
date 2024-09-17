@@ -44,6 +44,6 @@ public class Mensagem {
 
     private Integer quantidadeLikes;
 
-    private boolean bloqueado;
+    private boolean bloqueado = false;
 
 }

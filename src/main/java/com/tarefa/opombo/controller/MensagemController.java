@@ -3,6 +3,8 @@ package com.tarefa.opombo.controller;
 import com.tarefa.opombo.exception.OPomboException;
 import com.tarefa.opombo.model.entity.Mensagem;
 import com.tarefa.opombo.model.entity.Usuario;
+import com.tarefa.opombo.model.seletor.MensagemSeletor;
+import com.tarefa.opombo.model.seletor.UsuarioSeletor;
 import com.tarefa.opombo.service.MensagemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,12 @@ public class MensagemController {
 
     @Autowired
     private MensagemService mensagemService;
+
+    @Operation(summary = "Buscar mensagens com seletor")
+    @PostMapping("/filtro")
+    public List<Mensagem> buscarComSeletor(@RequestBody MensagemSeletor mensagemSeletor) throws OPomboException {
+        return mensagemService.buscarComSeletor(mensagemSeletor);
+    }
 
     @Operation(summary = "Buscar todas as mensagens",
             description = "Retorna uma lista de todas as mensagens cadastrados no sistema.",

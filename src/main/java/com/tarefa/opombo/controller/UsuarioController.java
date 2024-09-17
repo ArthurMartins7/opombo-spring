@@ -2,6 +2,7 @@ package com.tarefa.opombo.controller;
 
 import com.tarefa.opombo.exception.OPomboException;
 import com.tarefa.opombo.model.entity.Usuario;
+import com.tarefa.opombo.model.seletor.UsuarioSeletor;
 import com.tarefa.opombo.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,6 +23,12 @@ public class UsuarioController {
 
     @Autowired
     UsuarioService usuarioService;
+
+    @Operation(summary = "Buscar usuários com seletor")
+    @PostMapping("/filtro")
+    public List<Usuario> buscarComSeletor(@RequestBody UsuarioSeletor usuarioSeletor) throws OPomboException {
+        return usuarioService.buscarComSeletor(usuarioSeletor);
+    }
 
     @Operation(summary = "Buscar todos os usuários",
             description = "Retorna uma lista de todos os usuários cadastrados no sistema.",
