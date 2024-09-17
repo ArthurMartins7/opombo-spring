@@ -32,7 +32,7 @@ public class UsuarioSeletor extends BaseSeletor implements Specification<Usuario
         }
 
         if (this.getNome() != null && !this.getNome().trim().isEmpty()) {
-            predicates.add(cb.like(root.get("name"), "%" + this.getNome() + "%"));
+            predicates.add(cb.like(root.get("nome"), "%" + this.getNome() + "%"));
         }
 
         if (this.getEmail() != null && !this.getEmail().trim().isEmpty()) {
