@@ -30,6 +30,17 @@ public class MensagemService {
         return mensagemRepository.findById(id).orElseThrow(() -> new OPomboException("Mensagem não encontrada."));
     }
 
+    public List<Mensagem> buscarTodasMensagensPorIdUsuario(int idUsuario) throws OPomboException {
+
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new OPomboException("Usuário não encontrado."));
+        ;
+        if (usuario != null) {
+            return mensagemRepository.findByUsuario(usuario);
+        }
+
+        return List.of();
+    }
+
     public Mensagem salvar(Mensagem mensagem) throws OPomboException {
         return mensagemRepository.save(mensagem);
     }

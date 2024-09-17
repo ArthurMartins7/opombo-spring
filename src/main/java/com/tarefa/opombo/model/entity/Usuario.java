@@ -1,9 +1,13 @@
 package com.tarefa.opombo.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tarefa.opombo.model.enums.PerfilAcesso;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -11,6 +15,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,18 +31,19 @@ public class Usuario {
     @Column(nullable = false)
     private PerfilAcesso perfilAcesso;
 
-    @Column(nullable = false)
+    @NotBlank(message = "O nome não pode ser vazio ou apenas espaços em branco.")
     private String nome;
 
     @Email
-    @Column(nullable = false)
+    @NotBlank(message = "O nome não pode ser vazio ou apenas espaços em branco.")
     private String email;
 
-    @Column(nullable = false)
+    @NotBlank(message = "A senha não pode ser vazio ou apenas espaços em branco.")
     private String senha;
 
     @CPF
-    @Column(nullable = false)
+    @NotBlank(message = "O CPF não pode ser vazio ou apenas espaços em branco.")
+    @Column(unique = true, nullable = false)
     private String cpf;
 
     @CreationTimestamp
@@ -46,9 +52,11 @@ public class Usuario {
     private LocalDateTime criadoEm;
 
     @OneToMany(mappedBy = "usuario")
-    private Set<Mensagem> mensagens;
+    @JsonBackReference
+    private List<Mensagem> mensagens;
 
-    @ManyToMany(mappedBy = "curtidas", fetch = FetchType.EAGER)
-    private Set<Mensagem> mensagensCurtidas;
+//    @ManyToMany(mappedBy = "curtidas", fetch = FetchType.EAGER)
+//    @JsonBackReference
+//    private List<Mensagem> mensagensCurtidas;
 
 }

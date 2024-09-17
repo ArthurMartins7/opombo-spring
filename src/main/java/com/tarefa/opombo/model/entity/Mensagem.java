@@ -1,5 +1,6 @@
 package com.tarefa.opombo.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -23,7 +24,7 @@ public class Mensagem {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @NotBlank()
+    @NotBlank(message = "O conteúdo da mensagem não pode ser vazio ou apenas espaços em branco.")
     @Size(max = 300, message = "O conteúdo da mensagem deve conter no máximo 300 caracteres")
     @Size(min = 1, message = "O conteúdo da mensagem deve conter pelo menos 1 caractere, desconsiderando os espaços")
     private String texto;
@@ -37,7 +38,6 @@ public class Mensagem {
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "mensagem_curtida", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_mensagem"))
     private List<Usuario> curtidas;

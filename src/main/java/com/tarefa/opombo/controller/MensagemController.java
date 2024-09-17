@@ -26,7 +26,7 @@ public class MensagemController {
     @Autowired
     private MensagemService mensagemService;
 
-    @Operation(summary = "Buscar todos os usuários",
+    @Operation(summary = "Buscar todas as mensagens",
             description = "Retorna uma lista de todas as mensagens cadastrados no sistema.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Lista de mensagens retornada com sucesso")
@@ -45,6 +45,12 @@ public class MensagemController {
         return ResponseEntity.ok(mensagem);
     }
 
+    @Operation(summary = "Busca todas as mensagens de um usuário especfico pelo seu ID")
+    @GetMapping("/user/{idUsuario}")
+    public List<Mensagem> buscarTodasMensagensPorIdUsuario(int idUsuario) throws OPomboException {
+        return mensagemService.buscarTodasMensagensPorIdUsuario(idUsuario);
+    }
+
     @Operation(summary = "Salvar nova mensagem",
             description = "Adiciona uma nova mensagem ao sistema.",
             responses = {
@@ -54,7 +60,6 @@ public class MensagemController {
                     @ApiResponse(responseCode = "400", description = "Erro de validação ou regra de negócio",
                             content = @Content(mediaType = "application/json",
                                     examples = @ExampleObject(value = "{\"message\": \"Erro de validação: campo X é obrigatório\", \"status\": 400}")))})
-
 
     @PostMapping
     public ResponseEntity<Mensagem> salvar(@Valid @RequestBody Mensagem mensagem) {

@@ -20,8 +20,7 @@ public class Denuncia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "O motivo não pode ser vazio ou apenas espaços em branco.")
     @Size(min = 1, max = 300)
     private String motivo;
 
@@ -36,7 +35,7 @@ public class Denuncia {
 
     @ManyToOne
     @JoinColumn(name = "id_mensagem")
-    private Usuario mensagem;
+    private Mensagem mensagem;
 
 
 }
