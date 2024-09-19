@@ -24,7 +24,7 @@ public class MensagemSeletor extends BaseSeletor implements Specification<Mensag
         List<Predicate> predicates = new ArrayList<>();
 
         if (this.getBloqueado() != null) {
-            predicates.add(cb.like(root.get("bloquado"), "%" + this.getBloqueado() + "%"));
+            predicates.add(cb.like(root.get("bloqueado"), "%" + this.getBloqueado() + "%"));
         }
 
         aplicarFiltroPeriodo(root, cb, predicates, this.getDataInicialCriacao(), this.getDataFinalCriacao(), "createdAt");

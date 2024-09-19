@@ -13,7 +13,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table
@@ -33,6 +32,9 @@ public class Mensagem {
     @Setter(AccessLevel.NONE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dataHoraCriacao;
+
+    @OneToMany(mappedBy = "mensagem")
+    private List<Denuncia> denuncias;
 
     @ManyToOne
     @JoinColumn(name = "id_usuario")

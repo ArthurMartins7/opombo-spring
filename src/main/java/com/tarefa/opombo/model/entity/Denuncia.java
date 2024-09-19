@@ -1,6 +1,8 @@
 package com.tarefa.opombo.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tarefa.opombo.model.enums.MotivoDenuncia;
+import com.tarefa.opombo.model.enums.SituacaoDenuncia;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,9 +22,12 @@ public class Denuncia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "O motivo não pode ser vazio ou apenas espaços em branco.")
-    @Size(min = 1, max = 300)
-    private String motivo;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MotivoDenuncia motivo;
+
+    @Enumerated(EnumType.STRING)
+    private SituacaoDenuncia situacao;
 
     @CreationTimestamp
     @Setter(AccessLevel.NONE)
@@ -31,7 +36,7 @@ public class Denuncia {
 
     @ManyToOne
     @JoinColumn(name = "id_usuario")
-    private Usuario usuario;
+    private Usuario denunciante;
 
     @ManyToOne
     @JoinColumn(name = "id_mensagem")

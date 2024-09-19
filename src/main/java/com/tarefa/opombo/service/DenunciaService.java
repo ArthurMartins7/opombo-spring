@@ -4,6 +4,7 @@ import com.tarefa.opombo.exception.OPomboException;
 import com.tarefa.opombo.model.entity.Denuncia;
 import com.tarefa.opombo.model.entity.Usuario;
 import com.tarefa.opombo.model.enums.PerfilAcesso;
+import com.tarefa.opombo.model.enums.SituacaoDenuncia;
 import com.tarefa.opombo.model.repository.DenunciaRepository;
 import com.tarefa.opombo.model.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,9 @@ public class DenunciaService {
         return denunciaRepository.findById(idDenuncia).orElseThrow(() -> new OPomboException("Denúncia não encontrada."));
     }
 
-    public Denuncia salvar(Denuncia denuncia) {
+    public Denuncia salvar(Denuncia denuncia) throws OPomboException {
+        denuncia.setSituacao(SituacaoDenuncia.PENDENTE);
+
         return denunciaRepository.save(denuncia);
     }
 
