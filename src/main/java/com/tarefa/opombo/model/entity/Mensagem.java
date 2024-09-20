@@ -3,6 +3,7 @@ package com.tarefa.opombo.model.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tarefa.opombo.model.dto.MensagemDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -34,6 +35,7 @@ public class Mensagem {
     private LocalDateTime dataHoraCriacao;
 
     @OneToMany(mappedBy = "mensagem")
+    @JsonBackReference
     private List<Denuncia> denuncias;
 
     @ManyToOne
@@ -47,5 +49,18 @@ public class Mensagem {
     private Integer quantidadeLikes;
 
     private boolean bloqueado = false;
+
+    public static MensagemDTO toDTO(Mensagem mensagem, Integer quantidadeLikes, Integer quantidadeDenuncias) {
+        return new MensagemDTO(
+                mensagem.getId(),
+                mensagem.getTexto(),
+                mensagem.isBloqueado(),
+                mensagem.getUsuario().getId(),
+                mensagem.getUsuario().getNome(),
+                quantidadeLikes,
+                quantidadeDenuncias
+        );
+    }
+
 
 }
