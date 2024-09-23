@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -48,6 +49,16 @@ public class UsuarioService {
     }
 
     public Usuario salvar(Usuario usuario) throws OPomboException {
+
+        List<Usuario> usuarios = usuarioRepository.findAll();
+
+        for (Usuario u : usuarios) {
+            if (u.getCpf().equals(usuario.getCpf())) {
+                throw new OPomboException("Não pode utilizar um CPF já cadastrado!");
+            } else if (u.getEmail().equals(usuario.getEmail())) {
+                throw new OPomboException("Não pode utilizar um e-mail já cadastrado!");
+            }
+        }
         return usuarioRepository.save(usuario);
     }
 
@@ -60,3 +71,5 @@ public class UsuarioService {
     }
 
 }
+
+

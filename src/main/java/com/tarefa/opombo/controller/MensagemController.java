@@ -93,7 +93,7 @@ public class MensagemController {
     }
 
     @Operation(summary = "Buscar usuários que curtiram a mensagem")
-    @GetMapping("/curitdas")
+    @GetMapping("/curtidas")
     public List<Usuario> buscarUsuariosQueCurtiramAMensagem(@RequestParam String IdMensagem) throws OPomboException {
         return  mensagemService.buscarUsuariosQueCurtiramAMensagem(IdMensagem);
     }
