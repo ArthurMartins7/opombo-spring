@@ -78,7 +78,7 @@ public class UsuarioController {
 
     @Operation(summary = "Excluir usuário por ID", description = "Remove um usuário específico pelo seu ID.")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable Integer id) {
+    public ResponseEntity<Void> excluir(@PathVariable Integer id) throws OPomboException {
         usuarioService.excluir(id);
         return ResponseEntity.noContent().build();
     }

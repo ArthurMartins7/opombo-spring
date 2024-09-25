@@ -9,6 +9,7 @@ import com.tarefa.opombo.model.seletor.UsuarioSeletor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -66,7 +67,16 @@ public class UsuarioService {
         return usuarioRepository.save(usuarioAlterado);
     }
 
-    public void excluir(int id) {
+
+    public void excluir(int id) throws OPomboException {
+
+        List<Mensagem> mensagens = mensagemRepository.findAll();
+
+        for (Mensagem mensagem : mensagens) {
+            if (mensagem.getUsuario().getId() == id) {
+                throw new OPomboException("Não pode excluir um usuário que já criou uma mensagem!");
+            }
+        }
         usuarioRepository.deleteById(id);
     }
 
