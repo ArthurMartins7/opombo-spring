@@ -46,7 +46,7 @@ public class Mensagem {
     @JoinTable(name = "mensagem_curtida", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_mensagem"))
     private List<Usuario> curtidas;
 
-    private Integer quantidadeLikes;
+    private Integer quantidadeLikes = 0;
 
     private boolean bloqueado = false;
 
