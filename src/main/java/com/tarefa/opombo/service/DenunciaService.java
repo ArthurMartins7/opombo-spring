@@ -31,7 +31,7 @@ public class DenunciaService {
         return denunciaRepository.findById(idDenuncia).orElseThrow(() -> new OPomboException("Denúncia não encontrada."));
     }
 
-    public Denuncia salvar(Denuncia denuncia) throws OPomboException {
+    public Denuncia denunciar(Denuncia denuncia) throws OPomboException {
         denuncia.setSituacao(SituacaoDenuncia.PENDENTE);
 
         return denunciaRepository.save(denuncia);

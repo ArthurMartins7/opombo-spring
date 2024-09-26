@@ -22,6 +22,7 @@ public class Denuncia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MotivoDenuncia motivo;

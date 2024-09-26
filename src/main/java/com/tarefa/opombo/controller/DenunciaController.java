@@ -4,6 +4,7 @@ import com.tarefa.opombo.exception.OPomboException;
 import com.tarefa.opombo.model.entity.Denuncia;
 import com.tarefa.opombo.service.DenunciaService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,10 +29,10 @@ public class DenunciaController {
         return denunciaService.buscarPorId(idDenuncia, idUsuario);
     }
 
-    @Operation(summary = "Salvar denúncia")
+    @Operation(summary = "Denunciar")
     @PostMapping
-    public Denuncia salvar(@RequestBody Denuncia denuncia) throws OPomboException {
-        return denunciaService.salvar(denuncia);
+    public Denuncia denunciar(@RequestBody @Valid Denuncia denuncia) throws OPomboException {
+        return denunciaService.denunciar(denuncia);
     }
 
 
