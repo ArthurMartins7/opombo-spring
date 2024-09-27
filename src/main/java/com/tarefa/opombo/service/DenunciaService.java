@@ -45,11 +45,32 @@ public class DenunciaService {
         denunciaRepository.deleteById(idDenuncia);
     }
 
+    public boolean analisarDenuncia(int idUsuario, int idDenuncia) throws OPomboException {
+
+        verificarPerfilAcesso(idUsuario);
+
+        boolean analisada = false;
+
+        List<Denuncia> denuncias = denunciaRepository.findAll();
+
+        for (Denuncia denuncia : denuncias) {
+            if (denuncia.getId() == idDenuncia) {
+                analisada = true;
+                denuncia.setSituacao(SituacaoDenuncia.ANALISADA);
+            }
+        }
+
+        return analisada;
+    }
+
+
     public void verificarPerfilAcesso(int idUsuario) throws OPomboException {
         Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new OPomboException("Usuário não encontrado."));
 
-        if(usuario.getPerfilAcesso() == PerfilAcesso.GERAL) {
+        if (usuario.getPerfilAcesso() == PerfilAcesso.GERAL) {
             throw new OPomboException("Você não possui permissão para realizar essa ação.");
         }
     }
+
+
 }

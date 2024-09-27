@@ -1,9 +1,11 @@
 package com.tarefa.opombo.service;
 
 import com.tarefa.opombo.exception.OPomboException;
+import com.tarefa.opombo.model.entity.Denuncia;
 import com.tarefa.opombo.model.entity.Mensagem;
 import com.tarefa.opombo.model.entity.Usuario;
 import com.tarefa.opombo.model.enums.PerfilAcesso;
+import com.tarefa.opombo.model.repository.DenunciaRepository;
 import com.tarefa.opombo.model.repository.MensagemRepository;
 import com.tarefa.opombo.model.repository.UsuarioRepository;
 import com.tarefa.opombo.model.seletor.MensagemSeletor;
@@ -22,6 +24,11 @@ public class MensagemService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private DenunciaRepository denunciaRepository;
+
+    DenunciaService denunciaService = new DenunciaService();
 
 
     public List<Mensagem> buscarComSeletor(MensagemSeletor mensagemSeletor) {
@@ -99,6 +106,7 @@ public class MensagemService {
 
     public String bloquearMensagem(String idMensagem, int idUsuario) throws OPomboException {
         verificarPerfilAcesso(idUsuario);
+        verificarSeMensagemFoiDenunciada(idMensagem, idUsuario);
 
         String resultado;
 
@@ -114,6 +122,19 @@ public class MensagemService {
         mensagemRepository.save(mensagem);
 
         return resultado;
+    }
+
+    public void verificarSeMensagemFoiDenunciada(String idMensagem, int idUsuario) throws OPomboException {
+        List<Denuncia> denuncias = denunciaRepository.findAll();
+
+        for (Denuncia denuncia : denuncias) {
+            if (denuncia.getMensagem().getId().equals(idMensagem)) {
+                int idDenuncia = denuncia.getId();
+                denunciaService.analisarDenuncia(idUsuario, idDenuncia);
+            } else {
+                throw new OPomboException("A mensagem não foi denunciada");
+            }
+        }
     }
 
     public void verificarPerfilAcesso(int idUsuario) throws OPomboException {

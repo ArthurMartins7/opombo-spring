@@ -48,4 +48,10 @@ public class DenunciaController {
         denunciaService.excluir(id);
     }
 
+    @Operation(summary = "Analisar denúncia", description = "Analisa a denúncia de um usuario")
+    @PostMapping("/{idUsuario}/{idDenuncia}")
+    public boolean analisarDenuncia(@PathVariable int idUsuario, @PathVariable int idDenuncia) throws OPomboException {
+        return denunciaService.analisarDenuncia(idUsuario, idDenuncia);
+    }
+
 }
