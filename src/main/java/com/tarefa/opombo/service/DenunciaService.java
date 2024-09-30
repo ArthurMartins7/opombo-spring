@@ -48,16 +48,21 @@ public class DenunciaService {
     public boolean analisarDenuncia(int idUsuario, int idDenuncia) throws OPomboException {
 
         verificarPerfilAcesso(idUsuario);
+        Denuncia denuncia = denunciaRepository.findById(idDenuncia).orElseThrow(() -> new OPomboException("Denúncia não encontrada"));
 
         boolean analisada = false;
 
         List<Denuncia> denuncias = denunciaRepository.findAll();
+        denuncias.add(denuncia);
 
-        for (Denuncia denuncia : denuncias) {
-            if (denuncia.getId() == idDenuncia) {
-                analisada = true;
-                denuncia.setSituacao(SituacaoDenuncia.ANALISADA);
+        if (denuncia.getSituacao().equals(SituacaoDenuncia.PENDENTE)) {
+            for (Denuncia d : denuncias) {
+                d.setSituacao(SituacaoDenuncia.ANALISADA);
             }
+            analisada = true;
+            denunciaRepository.save(denuncia);
+        } else {
+            throw new OPomboException("A denúncia já foi analisada.");
         }
 
         return analisada;

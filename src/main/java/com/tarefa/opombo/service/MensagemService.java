@@ -5,6 +5,7 @@ import com.tarefa.opombo.model.entity.Denuncia;
 import com.tarefa.opombo.model.entity.Mensagem;
 import com.tarefa.opombo.model.entity.Usuario;
 import com.tarefa.opombo.model.enums.PerfilAcesso;
+import com.tarefa.opombo.model.enums.SituacaoDenuncia;
 import com.tarefa.opombo.model.repository.DenunciaRepository;
 import com.tarefa.opombo.model.repository.MensagemRepository;
 import com.tarefa.opombo.model.repository.UsuarioRepository;
@@ -106,12 +107,10 @@ public class MensagemService {
 
     public String bloquearMensagem(String idMensagem, int idUsuario) throws OPomboException {
         verificarPerfilAcesso(idUsuario);
-        verificarSeMensagemFoiDenunciada(idMensagem, idUsuario);
 
         String resultado;
-
         Mensagem mensagem = mensagemRepository.findById(idMensagem).get();
-        if (mensagem != null) {
+        if (verificarSituacaoMensagem(idMensagem)) {
             mensagem.setBloqueado(true);
             mensagem.setTexto("**Esse texto está bloqueado.**");
             resultado = "Mensagem bloqueada!";
@@ -124,17 +123,23 @@ public class MensagemService {
         return resultado;
     }
 
-    public void verificarSeMensagemFoiDenunciada(String idMensagem, int idUsuario) throws OPomboException {
-        List<Denuncia> denuncias = denunciaRepository.findAll();
+    public boolean verificarSituacaoMensagem(String idMensagem) throws OPomboException {
+        boolean analisada = false;
+
+        Mensagem mensagem = mensagemRepository.findById(idMensagem).orElseThrow(() -> new OPomboException("Mensagem não encontrada."));
+
+        List<Denuncia> denuncias = mensagem.getDenuncias();
 
         for (Denuncia denuncia : denuncias) {
-            if (denuncia.getMensagem().getId().equals(idMensagem)) {
-                int idDenuncia = denuncia.getId();
-                denunciaService.analisarDenuncia(idUsuario, idDenuncia);
+            if (denuncia.getSituacao() == SituacaoDenuncia.ANALISADA) {
+                analisada = true;
+                break;
             } else {
-                throw new OPomboException("A mensagem não foi denunciada");
+                throw new OPomboException("Para bloquear uma mensagem, ela precisar conter no mínimo uma denúncia analisada.");
             }
         }
+
+        return analisada;
     }
 
     public void verificarPerfilAcesso(int idUsuario) throws OPomboException {

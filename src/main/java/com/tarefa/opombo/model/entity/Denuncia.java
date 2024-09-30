@@ -28,7 +28,7 @@ public class Denuncia {
     private MotivoDenuncia motivo;
 
     @Enumerated(EnumType.STRING)
-    private SituacaoDenuncia situacao;
+    private SituacaoDenuncia situacao = SituacaoDenuncia.PENDENTE;
 
     @CreationTimestamp
     @Setter(AccessLevel.NONE)
