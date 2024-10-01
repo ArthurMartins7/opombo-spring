@@ -146,9 +146,23 @@ public class MensagemService {
     public MensagemDTO gerarRelatorioMensagem(String idMensagem) throws OPomboException {
         Mensagem mensagem = mensagemRepository.findById(idMensagem).orElseThrow(() -> new OPomboException("Mensagem não encontrada."));
 
-        MensagemDTO mensagemDTO = Mensagem.toDTO(mensagem, mensagem.getQuantidadeLikes(), mensagem.getDenuncias().size());
+        Integer qtdCurtidas = buscarCurtidasMensagem(mensagem.getId()).size();
+        Integer qtdDenuncias = buscarDenunciasMensagem(mensagem.getId()).size();
+        MensagemDTO mensagemDTO = Mensagem.toDTO(mensagem, qtdCurtidas, qtdDenuncias);
 
         return mensagemDTO;
+    }
+
+    public List<Usuario> buscarCurtidasMensagem(String idMensagem) throws OPomboException {
+        Mensagem mensagem = mensagemRepository.findById(idMensagem).orElseThrow(() -> new OPomboException("Publicação não encontrada."));
+
+        return mensagem.getCurtidas();
+    }
+
+    public List<Denuncia> buscarDenunciasMensagem(String idMensagem) throws OPomboException {
+        Mensagem mensagem = mensagemRepository.findById(idMensagem).orElseThrow(() -> new OPomboException("Publicação não encontrada."));
+
+        return mensagem.getDenuncias();
     }
 
     public void verificarPerfilAcesso(int idUsuario) throws OPomboException {
