@@ -54,9 +54,9 @@ public class Mensagem {
         return new MensagemDTO(
                 mensagem.getId(),
                 mensagem.getTexto(),
-                mensagem.getUsuario().getId(),
-                mensagem.getUsuario().getNome(),
                 quantidadeLikes,
+                mensagem.getUsuario().getNome(),
+                mensagem.getUsuario().getId(),
                 quantidadeDenuncias
         );
     }

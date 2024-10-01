@@ -63,6 +63,8 @@ public class DenunciaService {
     //DTO
     public DenunciaDTO gerarRelatorioDenunciasPorIdMensagem(int idUsuario, String idMensagem) throws OPomboException {
 
+        verificarPerfilAcesso(idUsuario);
+
         Mensagem mensagem = mensagemRepository.findById(idMensagem).orElseThrow(() -> new OPomboException("Mensagem não encontrada"));
 
         List<Denuncia> denuncias = mensagem.getDenuncias();
