@@ -1,6 +1,7 @@
 package com.tarefa.opombo.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tarefa.opombo.model.dto.DenunciaDTO;
 import com.tarefa.opombo.model.enums.MotivoDenuncia;
 import com.tarefa.opombo.model.enums.SituacaoDenuncia;
 import jakarta.persistence.*;
@@ -42,6 +43,15 @@ public class Denuncia {
     @ManyToOne
     @JoinColumn(name = "id_mensagem")
     private Mensagem mensagem;
+
+    public static DenunciaDTO toDTO(String idMensagem, Integer qtdDenuncia, Integer qtdDenunciasPendentes, Integer qtdDenunciasAnalisadas) {
+        return new DenunciaDTO(
+                idMensagem,
+                qtdDenuncia,
+                qtdDenunciasPendentes,
+                qtdDenunciasAnalisadas
+        );
+    }
 
 
 }

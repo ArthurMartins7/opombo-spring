@@ -1,6 +1,7 @@
 package com.tarefa.opombo.service;
 
 import com.tarefa.opombo.exception.OPomboException;
+import com.tarefa.opombo.model.dto.MensagemDTO;
 import com.tarefa.opombo.model.entity.Denuncia;
 import com.tarefa.opombo.model.entity.Mensagem;
 import com.tarefa.opombo.model.entity.Usuario;
@@ -140,6 +141,14 @@ public class MensagemService {
         }
 
         return analisada;
+    }
+
+    public MensagemDTO gerarRelatorioMensagem(String idMensagem) throws OPomboException {
+        Mensagem mensagem = mensagemRepository.findById(idMensagem).orElseThrow(() -> new OPomboException("Mensagem não encontrada."));
+
+        MensagemDTO mensagemDTO = Mensagem.toDTO(mensagem, mensagem.getQuantidadeLikes(), mensagem.getDenuncias().size());
+
+        return mensagemDTO;
     }
 
     public void verificarPerfilAcesso(int idUsuario) throws OPomboException {

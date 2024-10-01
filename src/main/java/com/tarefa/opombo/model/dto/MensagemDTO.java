@@ -9,10 +9,9 @@ public class MensagemDTO {
 
     private String id;
     private String texto = "**Mensagem Bloqueada**";
-    private boolean bloqueado;
-    private Integer idUsuario;
-    private String nomeUsuario;
-    private Integer totalDenuncias;
     private Integer qtdCurtidas;
+    private String nomeUsuario;
+    private Integer idUsuario;
+    private Integer totalDenuncias;
 
 }

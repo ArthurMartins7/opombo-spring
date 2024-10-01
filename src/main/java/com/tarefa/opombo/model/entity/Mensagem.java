@@ -54,7 +54,6 @@ public class Mensagem {
         return new MensagemDTO(
                 mensagem.getId(),
                 mensagem.getTexto(),
-                mensagem.isBloqueado(),
                 mensagem.getUsuario().getId(),
                 mensagem.getUsuario().getNome(),
                 quantidadeLikes,

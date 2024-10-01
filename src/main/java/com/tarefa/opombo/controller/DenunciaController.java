@@ -1,6 +1,8 @@
 package com.tarefa.opombo.controller;
 
 import com.tarefa.opombo.exception.OPomboException;
+import com.tarefa.opombo.model.dto.DenunciaDTO;
+import com.tarefa.opombo.model.dto.MensagemDTO;
 import com.tarefa.opombo.model.entity.Denuncia;
 import com.tarefa.opombo.service.DenunciaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,6 +29,12 @@ public class DenunciaController {
     @GetMapping("/{idDenuncia}")
     public Denuncia buscarPorId(@RequestParam int idDenuncia, int idUsuario) throws OPomboException {
         return denunciaService.buscarPorId(idDenuncia, idUsuario);
+    }
+
+    @Operation(summary = "Relatório", description = "Busca um DTO (relatório de denúncias) por id da mensagem")
+    @GetMapping("/dto/{idUsuario}/{idMensagem}")
+    public DenunciaDTO gerarRelatorioMensagem(@RequestParam int idUsuario, @RequestParam String idMensagem) throws OPomboException {
+        return denunciaService.gerarRelatorioDenunciasPorIdMensagem(idUsuario, idMensagem);
     }
 
     @Operation(summary = "Denunciar")

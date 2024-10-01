@@ -1,6 +1,7 @@
 package com.tarefa.opombo.controller;
 
 import com.tarefa.opombo.exception.OPomboException;
+import com.tarefa.opombo.model.dto.MensagemDTO;
 import com.tarefa.opombo.model.entity.Mensagem;
 import com.tarefa.opombo.model.entity.Usuario;
 import com.tarefa.opombo.model.seletor.MensagemSeletor;
@@ -58,6 +59,12 @@ public class MensagemController {
         return mensagemService.buscarTodasMensagensPorIdUsuario(idUsuario);
     }
 
+
+    @Operation(summary = "Relatório", description = "Busca um DTO (relatório de mensagem)")
+    @GetMapping("/dto")
+    public MensagemDTO gerarRelatorioMensagem(@RequestParam String idMensagem) throws OPomboException {
+        return mensagemService.gerarRelatorioMensagem(idMensagem);
+    }
     @Operation(summary = "Salvar nova mensagem",
             description = "Adiciona uma nova mensagem ao sistema.",
             responses = {
