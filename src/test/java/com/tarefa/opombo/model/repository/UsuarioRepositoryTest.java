@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.TransactionSystemException;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,6 +43,22 @@ class UsuarioRepositoryTest {
         u.setCpf("45541930987");
 
         assertThatThrownBy(() -> usuarioRepository.save(u)).isInstanceOf(Exception.class);
+
+    }
+
+    @Test
+    @DisplayName("Não pode salvar um usuario com email invalido")
+    public void testSalvarEmailInvalidoNulo() {
+        Usuario u = new Usuario();
+        u.setPerfilAcesso(PerfilAcesso.GERAL);
+        u.setNome("Usuario teste email invalido");
+        u.setEmail("usuarioexample.com");
+        u.setSenha("usuario123");
+        u.setCpf("27370724093");
+
+        assertThatThrownBy(() ->
+                usuarioRepository.save(u)).
+                isInstanceOf(Exception.class);
 
     }
 
