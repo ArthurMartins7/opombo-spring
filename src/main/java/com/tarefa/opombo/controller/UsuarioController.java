@@ -52,7 +52,7 @@ public class UsuarioController {
     @Operation(summary = "Salvar novo usuário",
             description = "Adiciona um novo usuário ao sistema.",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Carta criada com sucesso",
+                    @ApiResponse(responseCode = "201", description = "Usuario criada com sucesso",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = Usuario.class))),
                     @ApiResponse(responseCode = "400", description = "Erro de validação ou regra de negócio",
