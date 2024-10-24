@@ -60,7 +60,7 @@ public class UsuarioController {
                                     examples = @ExampleObject(value = "{\"message\": \"Erro de validação: campo X é obrigatório\", \"status\": 400}")))})
 
 
-    @PostMapping
+    @PostMapping("/public")
     public ResponseEntity<Usuario> salvar(@Valid @RequestBody Usuario usuario) {
         try {
             Usuario usuarioSalvo = usuarioService.salvar(usuario);

@@ -44,7 +44,7 @@ public class AuthenticationController {
 
     @PostMapping("/novo-usuario")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void registrarJogador(@RequestBody Usuario novoUsuario) throws OPomboException {
+    public void registrarUsuario(@RequestBody Usuario novoUsuario) throws OPomboException {
 
         String senhaCifrada = passwordEncoder.encode(novoUsuario.getSenha());
 
