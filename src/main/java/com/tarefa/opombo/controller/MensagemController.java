@@ -40,7 +40,7 @@ public class MensagemController {
                     @ApiResponse(responseCode = "200", description = "Lista de mensagens retornada com sucesso")
             })
 
-    @GetMapping
+    @GetMappin
     public List<Mensagem> buscarTodos() {
         return mensagemService.buscarTodos();
     }
