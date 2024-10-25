@@ -6,6 +6,7 @@ import com.tarefa.opombo.model.entity.Mensagem;
 import com.tarefa.opombo.model.entity.Usuario;
 import com.tarefa.opombo.model.seletor.MensagemSeletor;
 import com.tarefa.opombo.model.seletor.UsuarioSeletor;
+import com.tarefa.opombo.security.AuthorizationService;
 import com.tarefa.opombo.service.MensagemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,6 +29,9 @@ public class MensagemController {
     @Autowired
     private MensagemService mensagemService;
 
+    @Autowired
+    private AuthorizationService authorizationService;
+
     @Operation(summary = "Buscar mensagens com seletor")
     @PostMapping("/filtro")
     public List<Mensagem> buscarComSeletor(@RequestBody MensagemSeletor mensagemSeletor) throws OPomboException {
@@ -40,7 +44,7 @@ public class MensagemController {
                     @ApiResponse(responseCode = "200", description = "Lista de mensagens retornada com sucesso")
             })
 
-    @GetMappin
+    @GetMapping
     public List<Mensagem> buscarTodos() {
         return mensagemService.buscarTodos();
     }
@@ -113,8 +117,9 @@ public class MensagemController {
 
     @Operation(summary = "Bloquear mensagem", description = "Bloqueia a mensagem de um usuário")
     @PostMapping("/{idMensagem}")
-    public String bloquearMensagem(@PathVariable String idMensagem, int idUsuario) throws OPomboException {
-        return mensagemService.bloquearMensagem(idMensagem, idUsuario);
+    public String bloquearMensagem(@PathVariable String idMensagem) throws OPomboException {
+        authorizationService.verificarPerfilAcesso();
+        return mensagemService.bloquearMensagem(idMensagem);
     }
 
 }

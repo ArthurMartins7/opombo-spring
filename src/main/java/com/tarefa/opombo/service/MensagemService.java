@@ -106,8 +106,7 @@ public class MensagemService {
         return curtiu;
     }
 
-    public String bloquearMensagem(String idMensagem, int idUsuario) throws OPomboException {
-        verificarPerfilAcesso(idUsuario);
+    public String bloquearMensagem(String idMensagem) throws OPomboException {
 
         String resultado;
         Mensagem mensagem = mensagemRepository.findById(idMensagem).get();

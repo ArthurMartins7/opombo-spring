@@ -38,7 +38,11 @@ public class AuthenticationController {
      * @return o JWT gerado
      */
     @PostMapping("authenticate")
-    public String authenticate(Authentication authentication) {
+    public String authenticate(Authentication authentication) throws OPomboException {
+
+
+
+
         return authenticationService.authenticate(authentication);
     }
 
@@ -53,4 +57,5 @@ public class AuthenticationController {
 
         usuarioService.salvar(novoUsuario);
     }
+
 }
