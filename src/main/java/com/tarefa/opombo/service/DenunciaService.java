@@ -10,6 +10,7 @@ import com.tarefa.opombo.model.enums.SituacaoDenuncia;
 import com.tarefa.opombo.model.repository.DenunciaRepository;
 import com.tarefa.opombo.model.repository.MensagemRepository;
 import com.tarefa.opombo.model.repository.UsuarioRepository;
+import com.tarefa.opombo.security.AuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,13 +29,17 @@ public class DenunciaService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public List<Denuncia> buscarTodas(int idUsuario) throws OPomboException {
-        verificarPerfilAcesso(idUsuario);
+    @Autowired
+    private AuthorizationService authorizationService;
+
+    public List<Denuncia> buscarTodas() throws OPomboException {
+        authorizationService.verificarPerfilAcesso();
         return denunciaRepository.findAll();
     }
 
-    public Denuncia buscarPorId(int idDenuncia, int idUsuario) throws OPomboException {
-        verificarPerfilAcesso(idUsuario);
+    public Denuncia buscarPorId(int idDenuncia) throws OPomboException {
+        authorizationService.verificarPerfilAcesso();
+
         return denunciaRepository.findById(idDenuncia).orElseThrow(() -> new OPomboException("Denúncia não encontrada."));
     }
 
@@ -53,17 +58,22 @@ public class DenunciaService {
     }
 
     public Denuncia alterar(Denuncia denunciaAlterada) throws OPomboException {
+        authorizationService.verifiarCredenciaisUsuario(denunciaAlterada.getDenunciante().getId());
+
         return denunciaRepository.save(denunciaAlterada);
     }
 
     public void excluir(Integer idDenuncia) throws OPomboException {
+        Denuncia denuncia = denunciaRepository.findById(idDenuncia).orElseThrow(() -> new OPomboException("Denúncia não encontrada!"));
+
+        authorizationService.verifiarCredenciaisUsuario(denuncia.getDenunciante().getId());
+
         denunciaRepository.deleteById(idDenuncia);
     }
 
     //DTO
-    public DenunciaDTO gerarRelatorioDenunciasPorIdMensagem(int idUsuario, String idMensagem) throws OPomboException {
-
-        verificarPerfilAcesso(idUsuario);
+    public DenunciaDTO gerarRelatorioDenunciasPorIdMensagem(String idMensagem) throws OPomboException {
+        authorizationService.verificarPerfilAcesso();
 
         Mensagem mensagem = mensagemRepository.findById(idMensagem).orElseThrow(() -> new OPomboException("Mensagem não encontrada"));
 
@@ -83,9 +93,9 @@ public class DenunciaService {
         return denunciaDTO;
     }
 
-    public boolean analisarDenuncia(int idUsuario, int idDenuncia) throws OPomboException {
+    public boolean analisarDenuncia(int idDenuncia) throws OPomboException {
+        authorizationService.verificarPerfilAcesso();
 
-        verificarPerfilAcesso(idUsuario);
         Denuncia denuncia = denunciaRepository.findById(idDenuncia).orElseThrow(() -> new OPomboException("Denúncia não encontrada"));
 
         boolean analisada = false;

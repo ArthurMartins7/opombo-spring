@@ -21,20 +21,20 @@ public class DenunciaController {
 
     @Operation(summary = "Buscar todas as denúncias")
     @GetMapping
-    public List<Denuncia> buscarTodas(@RequestParam  int idUsuario) throws OPomboException {
-        return denunciaService.buscarTodas(idUsuario);
+    public List<Denuncia> buscarTodas() throws OPomboException {
+        return denunciaService.buscarTodas();
     }
 
     @Operation(summary = "Buscar denúncia por id")
     @GetMapping("/{idDenuncia}")
-    public Denuncia buscarPorId(@RequestParam int idDenuncia, int idUsuario) throws OPomboException {
-        return denunciaService.buscarPorId(idDenuncia, idUsuario);
+    public Denuncia buscarPorId(@RequestParam int idDenuncia) throws OPomboException {
+        return denunciaService.buscarPorId(idDenuncia);
     }
 
     @Operation(summary = "Relatório", description = "Busca um DTO (relatório de denúncias) por id da mensagem")
-    @GetMapping("/dto/{idUsuario}/{idMensagem}")
-    public DenunciaDTO gerarRelatorioMensagem(@RequestParam int idUsuario, @RequestParam String idMensagem) throws OPomboException {
-        return denunciaService.gerarRelatorioDenunciasPorIdMensagem(idUsuario, idMensagem);
+    @GetMapping("/dto/{idMensagem}")
+    public DenunciaDTO gerarRelatorioMensagem(@RequestParam String idMensagem) throws OPomboException {
+        return denunciaService.gerarRelatorioDenunciasPorIdMensagem(idMensagem);
     }
 
     @Operation(summary = "Denunciar")
@@ -57,9 +57,9 @@ public class DenunciaController {
     }
 
     @Operation(summary = "Analisar denúncia", description = "Analisa a denúncia de um usuario")
-    @PostMapping("/{idUsuario}/{idDenuncia}")
-    public boolean analisarDenuncia(@PathVariable int idUsuario, @PathVariable int idDenuncia) throws OPomboException {
-        return denunciaService.analisarDenuncia(idUsuario, idDenuncia);
+    @PostMapping("/{idDenuncia}")
+    public boolean analisarDenuncia(@PathVariable int idDenuncia) throws OPomboException {
+        return denunciaService.analisarDenuncia(idDenuncia);
     }
 
 }

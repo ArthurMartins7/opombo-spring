@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping(path = "/api/mensagem")
+@RequestMapping(path = "/api/mensagens")
 public class MensagemController {
 
     @Autowired
@@ -98,7 +98,7 @@ public class MensagemController {
 
     @Operation(summary = "Excluir mensagem por ID", description = "Remove um mensagem específico pelo seu ID.")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable String id) {
+    public ResponseEntity<Void> excluir(@PathVariable String id) throws OPomboException {
         mensagemService.excluir(id);
         return ResponseEntity.noContent().build();
     }
@@ -118,7 +118,7 @@ public class MensagemController {
     @Operation(summary = "Bloquear mensagem", description = "Bloqueia a mensagem de um usuário")
     @PostMapping("/{idMensagem}")
     public String bloquearMensagem(@PathVariable String idMensagem) throws OPomboException {
-        authorizationService.verificarPerfilAcesso();
+
         return mensagemService.bloquearMensagem(idMensagem);
     }
 
