@@ -1,8 +1,10 @@
 package com.tarefa.opombo.controller;
 
 import com.tarefa.opombo.exception.OPomboException;
+import com.tarefa.opombo.model.dto.UsuarioEditadoDTO;
 import com.tarefa.opombo.model.entity.Usuario;
 import com.tarefa.opombo.model.seletor.UsuarioSeletor;
+import com.tarefa.opombo.security.AuthorizationService;
 import com.tarefa.opombo.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,6 +26,9 @@ public class UsuarioController {
     @Autowired
     UsuarioService usuarioService;
 
+    @Autowired
+    AuthorizationService authorizationService;
+
     @Operation(summary = "Buscar usuários com seletor")
     @PostMapping("/filtro")
     public List<Usuario> buscarComSeletor(@RequestBody UsuarioSeletor usuarioSeletor) throws OPomboException {
@@ -37,7 +42,8 @@ public class UsuarioController {
             })
 
     @GetMapping
-    public List<Usuario> buscarTodos() {
+    public List<Usuario> buscarTodos() throws OPomboException {
+        authorizationService.verificarPerfilAcesso();
         return usuarioService.buscarTodos();
     }
 
@@ -71,9 +77,9 @@ public class UsuarioController {
     }
 
     @Operation(summary = "Alterar usuário existente", description = "Atualiza os dados de um usuário existente.")
-    @PutMapping
-    public ResponseEntity<Usuario> alterar(@Valid @RequestBody Usuario usuarioEditado) throws OPomboException {
-        return ResponseEntity.ok(usuarioService.alterar(usuarioEditado));
+    @PutMapping("/{idUsuario}")
+    public ResponseEntity<Usuario> alterar(@Valid  @PathVariable int idUsuario, @RequestBody UsuarioEditadoDTO usuarioEditado) throws OPomboException {
+        return ResponseEntity.ok(usuarioService.alterar(idUsuario, usuarioEditado));
     }
 
     @Operation(summary = "Excluir usuário por ID", description = "Remove um usuário específico pelo seu ID.")

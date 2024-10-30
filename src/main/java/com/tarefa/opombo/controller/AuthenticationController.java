@@ -38,7 +38,7 @@ public class AuthenticationController {
      * @return o JWT gerado
      */
     @PostMapping("authenticate")
-    public String authenticate(Authentication authentication) {
+    public String authenticate(Authentication authentication) throws OPomboException {
         return authenticationService.authenticate(authentication);
     }
 
@@ -49,8 +49,11 @@ public class AuthenticationController {
         String senhaCifrada = passwordEncoder.encode(novoUsuario.getSenha());
 
         novoUsuario.setSenha(senhaCifrada);
-        novoUsuario.setPerfilAcesso(PerfilAcesso.GERAL);
 
+        if(novoUsuario.getPerfilAcesso() == null || novoUsuario.getPerfilAcesso().toString().isEmpty()) {
+            novoUsuario.setPerfilAcesso(PerfilAcesso.GERAL);
+        }
         usuarioService.salvar(novoUsuario);
     }
+
 }

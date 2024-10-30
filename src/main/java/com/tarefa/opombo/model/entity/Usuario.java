@@ -33,7 +33,7 @@ public class Usuario implements UserDetails {
     private Integer id;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private PerfilAcesso perfilAcesso;
 
     @NotBlank(message = "O nome não pode ser vazio ou apenas espaços em branco.")
@@ -43,7 +43,9 @@ public class Usuario implements UserDetails {
     @NotBlank(message = "O nome não pode ser vazio ou apenas espaços em branco.")
     private String email;
 
+
     @NotBlank(message = "A senha não pode ser vazio ou apenas espaços em branco.")
+    @Column(length = 4000)
     private String senha;
 
     @CPF
@@ -55,6 +57,10 @@ public class Usuario implements UserDetails {
     @Setter(AccessLevel.NONE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime criadoEm;
+
+    @CreationTimestamp
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime dataUltimaModificacao;
 
     @OneToMany(mappedBy = "usuario")
     @JsonBackReference
@@ -70,12 +76,12 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getPassword() {
-        return senha;
+        return this.senha;
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return this.email;
     }
 
 

@@ -6,6 +6,7 @@ import com.tarefa.opombo.model.entity.Mensagem;
 import com.tarefa.opombo.model.entity.Usuario;
 import com.tarefa.opombo.model.seletor.MensagemSeletor;
 import com.tarefa.opombo.model.seletor.UsuarioSeletor;
+import com.tarefa.opombo.security.AuthorizationService;
 import com.tarefa.opombo.service.MensagemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,11 +23,14 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping(path = "/api/mensagem")
+@RequestMapping(path = "/api/mensagens")
 public class MensagemController {
 
     @Autowired
     private MensagemService mensagemService;
+
+    @Autowired
+    private AuthorizationService authorizationService;
 
     @Operation(summary = "Buscar mensagens com seletor")
     @PostMapping("/filtro")
@@ -94,7 +98,7 @@ public class MensagemController {
 
     @Operation(summary = "Excluir mensagem por ID", description = "Remove um mensagem específico pelo seu ID.")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable String id) {
+    public ResponseEntity<Void> excluir(@PathVariable String id) throws OPomboException {
         mensagemService.excluir(id);
         return ResponseEntity.noContent().build();
     }
@@ -113,8 +117,9 @@ public class MensagemController {
 
     @Operation(summary = "Bloquear mensagem", description = "Bloqueia a mensagem de um usuário")
     @PostMapping("/{idMensagem}")
-    public String bloquearMensagem(@PathVariable String idMensagem, int idUsuario) throws OPomboException {
-        return mensagemService.bloquearMensagem(idMensagem, idUsuario);
+    public String bloquearMensagem(@PathVariable String idMensagem) throws OPomboException {
+
+        return mensagemService.bloquearMensagem(idMensagem);
     }
 
 }

@@ -11,6 +11,7 @@ import com.tarefa.opombo.model.repository.DenunciaRepository;
 import com.tarefa.opombo.model.repository.MensagemRepository;
 import com.tarefa.opombo.model.repository.UsuarioRepository;
 import com.tarefa.opombo.model.seletor.MensagemSeletor;
+import com.tarefa.opombo.security.AuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -29,6 +30,9 @@ public class MensagemService {
 
     @Autowired
     private DenunciaRepository denunciaRepository;
+
+    @Autowired
+    private AuthorizationService authorizationService;
 
     DenunciaService denunciaService = new DenunciaService();
 
@@ -69,15 +73,26 @@ public class MensagemService {
     }
 
     public Mensagem salvar(Mensagem mensagem) throws OPomboException {
+
+        Usuario usuario = usuarioRepository.findById(mensagem.getUsuario().getId()).orElseThrow(() -> new OPomboException("Usuário não encontrado."));
+
+        mensagem.setUsuario(usuario);
+
         return mensagemRepository.save(mensagem);
     }
 
     public Mensagem alterar(Mensagem mensagemAlterada) throws OPomboException {
+        authorizationService.verifiarCredenciaisUsuario(mensagemAlterada.getUsuario().getId());
+
         return mensagemRepository.save(mensagemAlterada);
     }
 
-    public void excluir(String id) {
-        mensagemRepository.deleteById(id);
+    public void excluir(String idMensagem) throws OPomboException {
+        Mensagem mensagem = mensagemRepository.findById(idMensagem).orElseThrow(() -> new OPomboException("Mensagem não encontrada."));
+
+        authorizationService.verifiarCredenciaisUsuario(mensagem.getUsuario().getId());
+
+        mensagemRepository.deleteById(idMensagem);
     }
 
     public List<Usuario> buscarUsuariosQueCurtiramAMensagem(String idMensagem) throws OPomboException {
@@ -106,8 +121,8 @@ public class MensagemService {
         return curtiu;
     }
 
-    public String bloquearMensagem(String idMensagem, int idUsuario) throws OPomboException {
-        verificarPerfilAcesso(idUsuario);
+    public String bloquearMensagem(String idMensagem) throws OPomboException {
+        authorizationService.verificarPerfilAcesso();
 
         String resultado;
         Mensagem mensagem = mensagemRepository.findById(idMensagem).get();
@@ -144,6 +159,7 @@ public class MensagemService {
     }
 
     public MensagemDTO gerarRelatorioMensagem(String idMensagem) throws OPomboException {
+        authorizationService.verificarPerfilAcesso();
         Mensagem mensagem = mensagemRepository.findById(idMensagem).orElseThrow(() -> new OPomboException("Mensagem não encontrada."));
 
         Integer qtdCurtidas = buscarCurtidasMensagem(mensagem.getId());
@@ -160,6 +176,8 @@ public class MensagemService {
     }
 
     public List<Denuncia> buscarDenunciasMensagem(String idMensagem) throws OPomboException {
+        authorizationService.verificarPerfilAcesso();
+
         Mensagem mensagem = mensagemRepository.findById(idMensagem).orElseThrow(() -> new OPomboException("Publicação não encontrada."));
 
         return mensagem.getDenuncias();
