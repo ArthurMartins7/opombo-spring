@@ -73,6 +73,11 @@ public class MensagemService {
     }
 
     public Mensagem salvar(Mensagem mensagem) throws OPomboException {
+
+        Usuario usuario = usuarioRepository.findById(mensagem.getUsuario().getId()).orElseThrow(() -> new OPomboException("Usuário não encontrado."));
+
+        mensagem.setUsuario(usuario);
+
         return mensagemRepository.save(mensagem);
     }
 
