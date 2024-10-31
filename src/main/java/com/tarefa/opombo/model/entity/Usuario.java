@@ -66,6 +66,9 @@ public class Usuario implements UserDetails {
     @JsonBackReference
     private List<Mensagem> mensagens;
 
+    @Column(columnDefinition = "LONGTEXT")
+    private String imagemEmBase64;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
