@@ -50,6 +50,9 @@ public class Mensagem {
 
     private boolean bloqueado = false;
 
+    @Column(columnDefinition = "LONGTEXT")
+    private String imagemEmBase64;
+
     public static MensagemDTO toDTO(Mensagem mensagem, Integer quantidadeLikes, Integer quantidadeDenuncias) {
         return new MensagemDTO(
                 mensagem.getId(),

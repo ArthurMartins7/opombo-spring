@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,6 +39,9 @@ public class UsuarioService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ImagemService imagemService;
 
     public List<Usuario> buscarComSeletor(UsuarioSeletor usuarioSeletor) {
         if (usuarioSeletor.temPaginacao()) {
@@ -103,7 +107,6 @@ public class UsuarioService implements UserDetailsService {
         return usuarioRepository.save(usuarioEditado);
     }
 
-
     public void excluir(int id) throws OPomboException {
         authorizationService.verifiarCredenciaisUsuario(id);
 
@@ -115,6 +118,24 @@ public class UsuarioService implements UserDetailsService {
             }
         }
         usuarioRepository.deleteById(id);
+    }
+
+    public void salvarImagemUsuario(MultipartFile imagem, Integer idUsuario) throws OPomboException {
+
+        Usuario usuarioComNovaImagem = usuarioRepository
+                .findById(idUsuario)
+                .orElseThrow(() -> new OPomboException("Usuario não encontrada"));
+
+        //Converter a imagem para base64
+        String imagemBase64 = imagemService.processarImagem(imagem);
+
+        //Inserir a imagem na coluna imagemEmBase64 do usuario
+
+        //TODO ajustar para fazer o upload
+        usuarioComNovaImagem.setImagemEmBase64(imagemBase64);
+
+        //Chamar cartaRepository para persistir a imagem no usuario
+        usuarioRepository.save(usuarioComNovaImagem);
     }
 
     @Override
