@@ -1,8 +1,10 @@
 package com.tarefa.opombo.controller;
 
+import com.tarefa.opombo.auth.AuthenticationService;
 import com.tarefa.opombo.exception.OPomboException;
 import com.tarefa.opombo.model.dto.UsuarioEditadoDTO;
 import com.tarefa.opombo.model.entity.Usuario;
+import com.tarefa.opombo.model.enums.PerfilAcesso;
 import com.tarefa.opombo.model.seletor.UsuarioSeletor;
 import com.tarefa.opombo.security.AuthorizationService;
 import com.tarefa.opombo.service.UsuarioService;
@@ -11,23 +13,65 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/usuario")
+@MultipartConfig(fileSizeThreshold = 10485760) // 10MB
 public class UsuarioController {
 
     @Autowired
-    UsuarioService usuarioService;
+    private UsuarioService usuarioService;
 
     @Autowired
-    AuthorizationService authorizationService;
+    private AuthorizationService authorizationService;
+
+    @Autowired
+    private AuthenticationService authenticationService;
+
+
+
+    @Operation(
+            summary = "Upload de Imagem de perfil para Usuario",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Arquivo de imagem a ser enviado",
+                    required = true,
+                    content = @Content(
+                            mediaType = "multipart/form-data",
+                            schema = @Schema(type = "string", format = "binary")
+                    )
+            ),
+            description = "Realiza o upload de uma imagem associada a um usuario específico."
+    )
+    @PostMapping("/{idUsuario}/upload")
+    public void fazerUploadCarta(@RequestParam("imagem") MultipartFile imagem,
+                                 @PathVariable Integer idUsuario)
+            throws OPomboException, IOException {
+
+        if (imagem == null) {
+            throw new OPomboException("Arquivo inválido");
+        }
+
+        Usuario usuarioAutenticado = authenticationService.getUsuarioAutenticado();
+        if (usuarioAutenticado == null) {
+            throw new OPomboException("Usuário não encontrado");
+        }
+
+        if (usuarioAutenticado.getPerfilAcesso() == PerfilAcesso.GERAL) {
+            throw new OPomboException("Usuário sem permissão de acesso");
+        }
+
+        usuarioService.salvarImagemUsuario(imagem, idUsuario);
+    }
 
     @Operation(summary = "Buscar usuários com seletor")
     @PostMapping("/filtro")
@@ -78,7 +122,7 @@ public class UsuarioController {
 
     @Operation(summary = "Alterar usuário existente", description = "Atualiza os dados de um usuário existente.")
     @PutMapping("/{idUsuario}")
-    public ResponseEntity<Usuario> alterar(@Valid  @PathVariable int idUsuario, @RequestBody UsuarioEditadoDTO usuarioEditado) throws OPomboException {
+    public ResponseEntity<Usuario> alterar(@Valid @PathVariable int idUsuario, @RequestBody UsuarioEditadoDTO usuarioEditado) throws OPomboException {
         return ResponseEntity.ok(usuarioService.alterar(idUsuario, usuarioEditado));
     }
 
