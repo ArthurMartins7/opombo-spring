@@ -65,7 +65,7 @@ public class UsuarioService implements UserDetailsService {
     }
 
     public Usuario buscarPorId(int id) throws OPomboException {
-        authorizationService.verificarPerfilAcesso();
+        //authorizationService.verificarPerfilAcesso();
 
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new OPomboException("Usuário não encontrado."));
