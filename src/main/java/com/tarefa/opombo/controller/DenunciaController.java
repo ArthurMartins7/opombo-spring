@@ -4,8 +4,12 @@ import com.tarefa.opombo.exception.OPomboException;
 import com.tarefa.opombo.model.dto.DenunciaDTO;
 import com.tarefa.opombo.model.dto.MensagemDTO;
 import com.tarefa.opombo.model.entity.Denuncia;
+import com.tarefa.opombo.model.entity.Mensagem;
+import com.tarefa.opombo.model.seletor.DenunciaSeletor;
+import com.tarefa.opombo.model.seletor.MensagemSeletor;
 import com.tarefa.opombo.service.DenunciaService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +45,12 @@ public class DenunciaController {
     @PostMapping
     public Denuncia denunciar(@RequestBody @Valid Denuncia denuncia) throws OPomboException {
         return denunciaService.denunciar(denuncia);
+    }
+
+    @Operation(summary = "Buscar denuncias com seletor")
+    @PostMapping("/filtro")
+    public List<Denuncia> buscarComSeletor(@RequestBody DenunciaSeletor denunciaSeletor) throws OPomboException {
+        return denunciaService.buscarComSeletor(denunciaSeletor);
     }
 
 

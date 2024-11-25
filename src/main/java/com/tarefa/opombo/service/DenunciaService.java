@@ -10,8 +10,12 @@ import com.tarefa.opombo.model.enums.SituacaoDenuncia;
 import com.tarefa.opombo.model.repository.DenunciaRepository;
 import com.tarefa.opombo.model.repository.MensagemRepository;
 import com.tarefa.opombo.model.repository.UsuarioRepository;
+import com.tarefa.opombo.model.seletor.DenunciaSeletor;
+import com.tarefa.opombo.model.seletor.MensagemSeletor;
 import com.tarefa.opombo.security.AuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -41,6 +45,18 @@ public class DenunciaService {
         authorizationService.verificarPerfilAcesso();
 
         return denunciaRepository.findById(idDenuncia).orElseThrow(() -> new OPomboException("Denúncia não encontrada."));
+    }
+
+    public List<Denuncia> buscarComSeletor(DenunciaSeletor denunciaSeletor) {
+        if (denunciaSeletor.temPaginacao()) {
+            int numeroPagina = denunciaSeletor.getPagina();
+            int tamanhoPagina = denunciaSeletor.getLimite();
+
+            PageRequest pagina = PageRequest.of(numeroPagina - 1, tamanhoPagina, Sort.by(Sort.Direction.DESC, "dataHoraCriacao"));
+            return denunciaRepository.findAll(denunciaSeletor, pagina).toList();
+        }
+
+        return denunciaRepository.findAll(denunciaSeletor, Sort.by(Sort.Direction.DESC, "dataHoraCriacao"));
     }
 
     public Denuncia denunciar(Denuncia denuncia) throws OPomboException {
