@@ -8,6 +8,7 @@ import jakarta.persistence.criteria.Root;
 import lombok.Data;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +19,8 @@ public class UsuarioSeletor extends BaseSeletor implements Specification<Usuario
     private String cpf;
     private String nome;
     private String email;
-    private LocalDateTime dataInicialCriacao;
-    private LocalDateTime dataFinalCriacao;
+    private LocalDate dataInicialCriacao;
+    private LocalDate dataFinalCriacao;
 
 
     @Override

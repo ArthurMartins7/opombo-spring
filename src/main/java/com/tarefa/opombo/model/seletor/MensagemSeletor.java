@@ -8,6 +8,7 @@ import jakarta.persistence.criteria.Root;
 import lombok.Data;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +18,8 @@ public class MensagemSeletor extends BaseSeletor implements Specification<Mensag
 
     private Boolean bloqueado;
     private String texto;
-    private LocalDateTime dataInicialCriacao;
-    private LocalDateTime dataFinalCriacao;
+    private LocalDate dataInicialCriacao;
+    private LocalDate dataFinalCriacao;
 
     @Override
     public Predicate toPredicate(Root<Mensagem> root, CriteriaQuery<?> query, CriteriaBuilder cb) {

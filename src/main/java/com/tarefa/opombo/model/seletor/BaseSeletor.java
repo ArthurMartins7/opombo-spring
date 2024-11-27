@@ -40,7 +40,7 @@ public class BaseSeletor {
 
     public static void aplicarFiltroPeriodo(Root root,
                                             CriteriaBuilder cb, List<Predicate> predicates,
-                                            LocalDateTime dataInicial, LocalDateTime dataFinal, String nomeAtributo) {
+                                            LocalDate dataInicial, LocalDate dataFinal, String nomeAtributo) {
         if (dataInicial != null && dataFinal != null) {
             //WHERE atributo BETWEEN min AND max
             predicates.add(cb.between(root.get(nomeAtributo), dataInicial, dataFinal));

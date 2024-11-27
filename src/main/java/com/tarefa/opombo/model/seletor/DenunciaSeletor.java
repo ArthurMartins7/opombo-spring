@@ -10,6 +10,7 @@ import jakarta.persistence.criteria.Root;
 import lombok.Data;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +20,8 @@ public class DenunciaSeletor extends BaseSeletor implements Specification<Denunc
 
     private MotivoDenuncia motivo;
     private SituacaoDenuncia situacao;
-    private LocalDateTime dataInicialCriacao;
-    private LocalDateTime dataFinalCriacao;
+    private LocalDate dataInicialCriacao;
+    private LocalDate dataFinalCriacao;
 
     @Override
     public Predicate toPredicate(Root<Denuncia> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -34,7 +35,7 @@ public class DenunciaSeletor extends BaseSeletor implements Specification<Denunc
             predicates.add(cb.equal(root.get("situacao"), this.getSituacao()));
         }
 
-        aplicarFiltroPeriodo(root, cb, predicates, this.getDataInicialCriacao(), this.getDataFinalCriacao(), "dataHoraCriacao a");
+        aplicarFiltroPeriodo(root, cb, predicates, this.getDataInicialCriacao(), this.getDataFinalCriacao(), "dataHoraCriacao");
 
         return cb.and(predicates.toArray(new Predicate[0]));
     }
