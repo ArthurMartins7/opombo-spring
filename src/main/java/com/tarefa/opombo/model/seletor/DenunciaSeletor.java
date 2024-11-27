@@ -18,6 +18,7 @@ import java.util.List;
 @Data
 public class DenunciaSeletor extends BaseSeletor implements Specification<Denuncia> {
 
+    private String texto;
     private MotivoDenuncia motivo;
     private SituacaoDenuncia situacao;
     private LocalDate dataInicialCriacao;
@@ -26,6 +27,11 @@ public class DenunciaSeletor extends BaseSeletor implements Specification<Denunc
     @Override
     public Predicate toPredicate(Root<Denuncia> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         List<Predicate> predicates = new ArrayList<>();
+
+        if(this.getTexto() != null && this.getTexto().trim().length() > 0) {
+            predicates.add(cb.like(root.join("mensagem").get("texto"), "%" + this.getTexto() + "%"));
+        }
+
 
         if(this.getMotivo() != null){
             predicates.add(cb.equal(root.get("motivo"), this.getMotivo()));
