@@ -67,7 +67,7 @@ public class DenunciaService {
             if (!(d.getDenunciante().getId() == denuncia.getDenunciante().getId())) {
                 denuncia.setSituacao(SituacaoDenuncia.PENDENTE);
             } else {
-                throw new OPomboException("Voc^r só pode fazer uma denúncia por mensagem!");
+                throw new OPomboException("Você só pode fazer uma denúncia por mensagem!");
             }
         }
         return denunciaRepository.save(denuncia);
@@ -116,13 +116,8 @@ public class DenunciaService {
 
         boolean analisada = false;
 
-        List<Denuncia> denuncias = denunciaRepository.findAll();
-        denuncias.add(denuncia);
-
         if (denuncia.getSituacao().equals(SituacaoDenuncia.PENDENTE)) {
-            for (Denuncia d : denuncias) {
-                d.setSituacao(SituacaoDenuncia.ANALISADA);
-            }
+            denuncia.setSituacao((SituacaoDenuncia.ANALISADA));
             analisada = true;
             denunciaRepository.save(denuncia);
         } else {

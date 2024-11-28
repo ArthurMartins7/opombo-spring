@@ -31,7 +31,7 @@ public class DenunciaController {
 
     @Operation(summary = "Buscar denúncia por id")
     @GetMapping("/{idDenuncia}")
-    public Denuncia buscarPorId(@RequestParam int idDenuncia) throws OPomboException {
+    public Denuncia buscarPorId(@PathVariable int idDenuncia) throws OPomboException {
         return denunciaService.buscarPorId(idDenuncia);
     }
 
