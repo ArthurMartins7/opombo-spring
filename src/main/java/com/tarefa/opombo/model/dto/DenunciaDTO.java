@@ -10,6 +10,6 @@ public class DenunciaDTO {
     private String idMensagem;
     private Integer qtdDenuncia;
     private Integer qtdDenunciasPendentes;
-    private Integer qtdDenunciasAnalisadas;
+    private Integer qtdDenunciasAceitas;
     private Integer qtdDenunciasRejeitadas;
 }
