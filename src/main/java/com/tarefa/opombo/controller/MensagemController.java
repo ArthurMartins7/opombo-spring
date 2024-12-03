@@ -116,10 +116,9 @@ public class MensagemController {
     }
 
     @Operation(summary = "Bloquear mensagem", description = "Bloqueia a mensagem de um usuário")
-    @PostMapping("/{idMensagem}")
-    public String bloquearMensagem(@PathVariable String idMensagem) throws OPomboException {
-
-        return mensagemService.bloquearMensagem(idMensagem);
+    @GetMapping("/bloquear/{idMensagem}")
+    public ResponseEntity bloquearMensagem(@PathVariable String idMensagem) throws OPomboException {
+        mensagemService.bloquearMensagem(idMensagem);
+        return ResponseEntity.ok().build();
     }
-
 }

@@ -44,12 +44,13 @@ public class Denuncia {
     @JoinColumn(name = "id_mensagem")
     private Mensagem mensagem;
 
-    public static DenunciaDTO toDTO(String idMensagem, Integer qtdDenuncia, Integer qtdDenunciasPendentes, Integer qtdDenunciasAnalisadas) {
+    public static DenunciaDTO toDTO(String idMensagem, Integer qtdDenuncia, Integer qtdDenunciasPendentes, Integer qtdDenunciasAnalisadas, Integer qtdDenunciasRejeitadas) {
         return new DenunciaDTO(
                 idMensagem,
                 qtdDenuncia,
                 qtdDenunciasPendentes,
-                qtdDenunciasAnalisadas
+                qtdDenunciasAnalisadas,
+                qtdDenunciasRejeitadas
         );
     }
 

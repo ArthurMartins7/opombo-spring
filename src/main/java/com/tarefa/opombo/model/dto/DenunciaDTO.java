@@ -11,4 +11,5 @@ public class DenunciaDTO {
     private Integer qtdDenuncia;
     private Integer qtdDenunciasPendentes;
     private Integer qtdDenunciasAnalisadas;
+    private Integer qtdDenunciasRejeitadas;
 }

@@ -66,10 +66,16 @@ public class DenunciaController {
         denunciaService.excluir(id);
     }
 
-    @Operation(summary = "Analisar denúncia", description = "Analisa a denúncia de um usuario")
-    @PostMapping("/{idDenuncia}")
-    public boolean analisarDenuncia(@PathVariable int idDenuncia) throws OPomboException {
-        return denunciaService.analisarDenuncia(idDenuncia);
+    @Operation(summary = "Aceitar denúncia", description = "Aceita a denúncia de um usuario")
+    @PostMapping("/aceitarDenuncia/{idDenuncia}")
+    public boolean aceitarDenuncia(@PathVariable int idDenuncia) throws OPomboException {
+        return denunciaService.aceitarDenuncia(idDenuncia);
+    }
+
+    @Operation(summary = "Rejeitar denúncia", description = "Rejeita a denúncia de um usuario")
+    @PostMapping("/rejeitarDenuncia/{idDenuncia}")
+    public boolean rejeitarDenuncia(@PathVariable int idDenuncia) throws OPomboException {
+        return denunciaService.rejeitarDenuncia(idDenuncia);
     }
 
 }

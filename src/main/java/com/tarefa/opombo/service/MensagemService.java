@@ -128,7 +128,6 @@ public class MensagemService {
         Mensagem mensagem = mensagemRepository.findById(idMensagem).get();
         if (verificarSituacaoMensagem(idMensagem)) {
             mensagem.setBloqueado(true);
-            mensagem.setTexto("**Esse texto está bloqueado.**");
             resultado = "Mensagem bloqueada!";
         } else {
             throw new OPomboException("A mensagem não foi bloqueada");
@@ -140,22 +139,19 @@ public class MensagemService {
     }
 
     public boolean verificarSituacaoMensagem(String idMensagem) throws OPomboException {
-        boolean analisada = false;
+        boolean temDenuncia = false;
 
         Mensagem mensagem = mensagemRepository.findById(idMensagem).orElseThrow(() -> new OPomboException("Mensagem não encontrada."));
 
         List<Denuncia> denuncias = mensagem.getDenuncias();
 
-        for (Denuncia denuncia : denuncias) {
-            if (denuncia.getSituacao() == SituacaoDenuncia.ANALISADA) {
-                analisada = true;
-                break;
-            } else {
-                throw new OPomboException("Para bloquear uma mensagem, ela precisar conter no mínimo uma denúncia analisada.");
-            }
+        if (denuncias.size() > 0) {
+            temDenuncia = true;
+        } else {
+            throw new OPomboException("Para bloquear uma mensagem, ela precisar conter no mínimo uma denúncia.");
         }
 
-        return analisada;
+        return temDenuncia;
     }
 
     public MensagemDTO gerarRelatorioMensagem(String idMensagem) throws OPomboException {

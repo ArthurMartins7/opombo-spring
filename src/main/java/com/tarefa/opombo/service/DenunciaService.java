@@ -95,36 +95,56 @@ public class DenunciaService {
 
         List<Denuncia> denuncias = mensagem.getDenuncias();
         List<Denuncia> denunciasPendentes = new ArrayList<>();
-        List<Denuncia> denunciasAnalisadas = new ArrayList<>();
+        List<Denuncia> denunciasAceitas = new ArrayList<>();
+        List<Denuncia> denunciasRejeitadas = new ArrayList<>();
 
         for (Denuncia denuncia : denuncias) {
             if (denuncia.getSituacao().equals(SituacaoDenuncia.PENDENTE)) {
                 denunciasPendentes.add(denuncia);
-            } else if (denuncia.getSituacao().equals(SituacaoDenuncia.ANALISADA)) {
-                denunciasAnalisadas.add(denuncia);
+            } else if (denuncia.getSituacao().equals(SituacaoDenuncia.ACEITA)) {
+                denunciasAceitas.add(denuncia);
+            } else {
+                denunciasRejeitadas.add(denuncia);
             }
         }
 
-        DenunciaDTO denunciaDTO = Denuncia.toDTO(idMensagem, denuncias.size(), denunciasPendentes.size(), denunciasAnalisadas.size());
+        DenunciaDTO denunciaDTO = Denuncia.toDTO(idMensagem, denuncias.size(), denunciasPendentes.size(), denunciasAceitas.size(), denunciasRejeitadas.size());
         return denunciaDTO;
     }
 
-    public boolean analisarDenuncia(int idDenuncia) throws OPomboException {
+    public boolean aceitarDenuncia(int idDenuncia) throws OPomboException {
         authorizationService.verificarPerfilAcesso();
 
         Denuncia denuncia = denunciaRepository.findById(idDenuncia).orElseThrow(() -> new OPomboException("Denúncia não encontrada"));
 
-        boolean analisada = false;
+        boolean aceita = false;
 
         if (denuncia.getSituacao().equals(SituacaoDenuncia.PENDENTE)) {
-            denuncia.setSituacao((SituacaoDenuncia.ANALISADA));
-            analisada = true;
+            denuncia.setSituacao((SituacaoDenuncia.ACEITA));
+            aceita = true;
             denunciaRepository.save(denuncia);
         } else {
             throw new OPomboException("A denúncia já foi analisada.");
         }
 
-        return analisada;
+        return aceita;
+    }
+
+    public boolean rejeitarDenuncia(int idDenuncia) throws OPomboException {
+        authorizationService.verificarPerfilAcesso();
+
+        Denuncia denuncia = denunciaRepository.findById(idDenuncia).orElseThrow(() -> new OPomboException("Denúncia não encontrada"));
+
+        boolean rejeitada = false;
+
+        if(denuncia.getSituacao().equals(SituacaoDenuncia.PENDENTE)) {
+            denuncia.setSituacao(SituacaoDenuncia.REJEITADA);
+            rejeitada = true;
+            denunciaRepository.save(denuncia);
+        } else {
+            throw new OPomboException("A denúncia já foi analisada.");
+        }
+        return rejeitada;
     }
 
 
