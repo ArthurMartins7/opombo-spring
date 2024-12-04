@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,6 +33,7 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @ToString.Exclude
     @Enumerated(EnumType.STRING)
     //@Column(nullable = false)
     private PerfilAcesso perfilAcesso;
@@ -63,8 +65,12 @@ public class Usuario implements UserDetails {
     private LocalDateTime dataUltimaModificacao;
 
     @OneToMany(mappedBy = "usuario")
-    @JsonBackReference
+    @ToString.Exclude
     private List<Mensagem> mensagens;
+
+    @OneToMany(mappedBy = "denunciante")
+    @ToString.Exclude
+    private List<Denuncia> denuncias;
 
     @Column(columnDefinition = "LONGTEXT")
     private String imagemEmBase64;

@@ -1,5 +1,6 @@
 package com.tarefa.opombo.model.repository;
 
+import com.tarefa.opombo.model.entity.Denuncia;
 import com.tarefa.opombo.model.entity.Mensagem;
 import com.tarefa.opombo.model.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -60,16 +60,9 @@ public class DenunciaService {
     }
 
     public Denuncia denunciar(Denuncia denuncia) throws OPomboException {
+        authorizationService.verificarPerfilAcesso();
+        this.verificarSeUsuarioJaDenunciouAMensagem(denuncia);
 
-        List<Denuncia> denuncias = denunciaRepository.findAll();
-
-        for (Denuncia d : denuncias) {
-            if (!(d.getDenunciante().getId() == denuncia.getDenunciante().getId())) {
-                denuncia.setSituacao(SituacaoDenuncia.PENDENTE);
-            } else {
-                throw new OPomboException("Você só pode fazer uma denúncia por mensagem!");
-            }
-        }
         return denunciaRepository.save(denuncia);
     }
 
@@ -137,7 +130,7 @@ public class DenunciaService {
 
         boolean rejeitada = false;
 
-        if(denuncia.getSituacao().equals(SituacaoDenuncia.PENDENTE)) {
+        if (denuncia.getSituacao().equals(SituacaoDenuncia.PENDENTE)) {
             denuncia.setSituacao(SituacaoDenuncia.REJEITADA);
             rejeitada = true;
             denunciaRepository.save(denuncia);
@@ -156,5 +149,12 @@ public class DenunciaService {
         }
     }
 
+    public void verificarSeUsuarioJaDenunciouAMensagem(Denuncia denuncia) throws OPomboException {
+        boolean jaDenunciou = denunciaRepository.existsByMensagemIdAndDenuncianteId(denuncia.getMensagem().getId(), denuncia.getDenunciante().getId());
+
+        if (jaDenunciou) {
+            throw new OPomboException("Você só pode denunciar a mensagem uma vez.");
+        }
+    }
 
 }

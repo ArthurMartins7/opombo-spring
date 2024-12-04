@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DenunciaRepository extends JpaRepository<Denuncia, Integer>, JpaSpecificationExecutor<Denuncia> {
 
+    boolean existsByMensagemIdAndDenuncianteId(String mensagemId, Integer denuncianteId);
+
 }

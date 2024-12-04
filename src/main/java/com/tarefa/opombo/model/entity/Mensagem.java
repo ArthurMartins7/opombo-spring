@@ -3,6 +3,7 @@ package com.tarefa.opombo.model.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tarefa.opombo.model.dto.MensagemDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -10,6 +11,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -36,9 +38,11 @@ public class Mensagem {
 
     @OneToMany(mappedBy = "mensagem")
     @JsonBackReference
+    @ToString.Exclude
     private List<Denuncia> denuncias;
 
     @ManyToOne
+    @ToString.Exclude
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
