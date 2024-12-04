@@ -41,6 +41,7 @@ public class Denuncia {
 
     @ManyToOne
     @ToString.Exclude
+    @JsonBackReference
     @JoinColumn(name = "id_usuario")
     private Usuario denunciante;
 

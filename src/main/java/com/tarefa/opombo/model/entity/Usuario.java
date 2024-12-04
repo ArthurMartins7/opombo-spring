@@ -33,7 +33,6 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ToString.Exclude
     @Enumerated(EnumType.STRING)
     //@Column(nullable = false)
     private PerfilAcesso perfilAcesso;
@@ -66,10 +65,12 @@ public class Usuario implements UserDetails {
 
     @OneToMany(mappedBy = "usuario")
     @ToString.Exclude
+    @JsonManagedReference
     private List<Mensagem> mensagens;
 
     @OneToMany(mappedBy = "denunciante")
     @ToString.Exclude
+    @JsonManagedReference
     private List<Denuncia> denuncias;
 
     @Column(columnDefinition = "LONGTEXT")

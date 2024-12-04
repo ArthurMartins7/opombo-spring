@@ -94,7 +94,7 @@ public class UsuarioController {
     @Operation(summary = "Pesquisar usuário por ID",
             description = "Busca um usuário específico pelo seu ID.")
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Usuario> bnuscarPorId(@PathVariable int id) throws OPomboException {
+    public ResponseEntity<Usuario> buscarPorId(@PathVariable int id) throws OPomboException {
         Usuario usuario = usuarioService.buscarPorId(id);
         return ResponseEntity.ok(usuario);
     }

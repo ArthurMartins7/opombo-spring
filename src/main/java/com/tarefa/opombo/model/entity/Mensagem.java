@@ -43,6 +43,7 @@ public class Mensagem {
 
     @ManyToOne
     @ToString.Exclude
+    @JsonBackReference
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
