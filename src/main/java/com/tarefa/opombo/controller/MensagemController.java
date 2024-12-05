@@ -1,5 +1,6 @@
 package com.tarefa.opombo.controller;
 
+import com.tarefa.opombo.auth.AuthenticationService;
 import com.tarefa.opombo.exception.OPomboException;
 import com.tarefa.opombo.model.dto.MensagemDTO;
 import com.tarefa.opombo.model.entity.Mensagem;
@@ -18,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -31,6 +34,38 @@ public class MensagemController {
 
     @Autowired
     private AuthorizationService authorizationService;
+
+    @Autowired
+    private AuthenticationService authenticationService;
+
+    @Operation(
+            summary = "Upload de Imagem para mensagem",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Arquivo de imagem a ser enviado",
+                    required = true,
+                    content = @Content(
+                            mediaType = "multipart/form-data",
+                            schema = @Schema(type = "string", format = "binary")
+                    )
+            ),
+            description = "Realiza o upload de uma imagem associada a uma mensagem específica."
+    )
+    @PostMapping("/{idMensagem}/upload")
+    public void fazerUploadMensagem(@RequestParam("imagem") MultipartFile imagem,
+                                @PathVariable String idMensagem)
+            throws OPomboException, IOException {
+
+        if(imagem == null) {
+            throw new OPomboException("Arquivo inválido");
+        }
+
+        Usuario usuarioAutenticado = authenticationService.getUsuarioAutenticado();
+        if(usuarioAutenticado == null) {
+            throw new OPomboException("Usuário não encontrado");
+        }
+
+        mensagemService.salvarImagemMensagem(imagem, idMensagem);
+    }
 
     @Operation(summary = "Buscar mensagens com seletor")
     @PostMapping("/filtro")

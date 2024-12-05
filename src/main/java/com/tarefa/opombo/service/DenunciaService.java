@@ -1,5 +1,6 @@
 package com.tarefa.opombo.service;
 
+import com.tarefa.opombo.auth.AuthenticationService;
 import com.tarefa.opombo.exception.OPomboException;
 import com.tarefa.opombo.model.dto.DenunciaDTO;
 import com.tarefa.opombo.model.entity.Denuncia;
@@ -36,6 +37,9 @@ public class DenunciaService {
     @Autowired
     private AuthorizationService authorizationService;
 
+    @Autowired
+    private AuthenticationService authenticationService;
+
     public List<Denuncia> buscarTodas() throws OPomboException {
         authorizationService.verificarPerfilAcesso();
         return denunciaRepository.findAll();
@@ -60,7 +64,12 @@ public class DenunciaService {
     }
 
     public Denuncia denunciar(Denuncia denuncia) throws OPomboException {
-        authorizationService.verificarPerfilAcesso();
+        this.authorizationService.verificarPerfilAcesso();
+
+        this.authorizationService.verifiarCredenciaisUsuario(denuncia.getDenunciante().getId());
+
+        denuncia.setDenunciante(authenticationService.getUsuarioAutenticado());
+
         this.verificarSeUsuarioJaDenunciouAMensagem(denuncia);
 
         return denunciaRepository.save(denuncia);

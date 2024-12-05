@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -34,7 +35,20 @@ public class MensagemService {
     @Autowired
     private AuthorizationService authorizationService;
 
+    @Autowired
+    private ImagemService imagemService;
+
     DenunciaService denunciaService = new DenunciaService();
+
+    public void salvarImagemMensagem(MultipartFile imagem, String idMensagem) throws OPomboException {
+
+        Mensagem mensagemComImagem = mensagemRepository.
+                findById(idMensagem)
+                .orElseThrow(() -> new OPomboException("Mensagem não encontrada"));
+        String imagemBase64 = imagemService.processarImagem(imagem);
+        mensagemComImagem.setImagemEmBase64(imagemBase64);
+        mensagemRepository.save(mensagemComImagem);
+    }
 
 
     public List<Mensagem> buscarComSeletor(MensagemSeletor mensagemSeletor) {

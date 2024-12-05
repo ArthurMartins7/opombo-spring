@@ -3,6 +3,7 @@ package com.tarefa.opombo.model.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tarefa.opombo.model.dto.DenunciaDTO;
 import com.tarefa.opombo.model.enums.MotivoDenuncia;
 import com.tarefa.opombo.model.enums.SituacaoDenuncia;
@@ -41,7 +42,6 @@ public class Denuncia {
 
     @ManyToOne
     @ToString.Exclude
-    @JsonBackReference
     @JoinColumn(name = "id_usuario")
     private Usuario denunciante;
 

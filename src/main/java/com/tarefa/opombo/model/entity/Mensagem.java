@@ -38,16 +38,14 @@ public class Mensagem {
 
     @OneToMany(mappedBy = "mensagem")
     @JsonBackReference
-    @ToString.Exclude
     private List<Denuncia> denuncias;
 
     @ManyToOne
-    @ToString.Exclude
-    @JsonBackReference
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
     @ManyToMany
+    @ToString.Exclude
     @JoinTable(name = "mensagem_curtida", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_mensagem"))
     private List<Usuario> curtidas;
 

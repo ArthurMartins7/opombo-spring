@@ -34,7 +34,7 @@ public class Usuario implements UserDetails {
     private Integer id;
 
     @Enumerated(EnumType.STRING)
-    //@Column(nullable = false)
+    @Column(nullable = false)
     private PerfilAcesso perfilAcesso;
 
     @NotBlank(message = "O nome não pode ser vazio ou apenas espaços em branco.")
@@ -63,15 +63,11 @@ public class Usuario implements UserDetails {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dataUltimaModificacao;
 
-    @OneToMany(mappedBy = "usuario")
-    @ToString.Exclude
-    @JsonManagedReference
-    private List<Mensagem> mensagens;
-
-    @OneToMany(mappedBy = "denunciante")
-    @ToString.Exclude
-    @JsonManagedReference
-    private List<Denuncia> denuncias;
+//    @OneToMany(mappedBy = "usuario")
+//    private List<Mensagem> mensagens;
+//
+//    @OneToMany(mappedBy = "denunciante")
+//    private List<Denuncia> denuncias;
 
     @Column(columnDefinition = "LONGTEXT")
     private String imagemEmBase64;
