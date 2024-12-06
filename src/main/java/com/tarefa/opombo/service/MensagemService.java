@@ -1,5 +1,6 @@
 package com.tarefa.opombo.service;
 
+import com.tarefa.opombo.auth.AuthenticationService;
 import com.tarefa.opombo.exception.OPomboException;
 import com.tarefa.opombo.model.dto.MensagemDTO;
 import com.tarefa.opombo.model.entity.Denuncia;
@@ -39,6 +40,8 @@ public class MensagemService {
     private ImagemService imagemService;
 
     DenunciaService denunciaService = new DenunciaService();
+    @Autowired
+    private AuthenticationService authenticationService;
 
     public void salvarImagemMensagem(MultipartFile imagem, String idMensagem) throws OPomboException {
 
@@ -114,10 +117,12 @@ public class MensagemService {
         return mensagem.getCurtidas();
     }
 
-    public boolean darLike(Integer idUsuario, String idMensagem) {
+    public boolean darLike(String idMensagem) throws OPomboException {
         boolean curtiu = false;
 
-        Usuario usuario = usuarioRepository.findById(idUsuario).get();
+        Usuario usuario = authenticationService.getUsuarioAutenticado();
+
+       // Usuario usuario = usuarioRepository.findById(idUsuario).get();
         Mensagem mensagem = mensagemRepository.findById(idMensagem).get();
 
         int totalLikesAtual = mensagem.getQuantidadeLikes();

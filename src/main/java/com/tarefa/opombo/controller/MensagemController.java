@@ -145,9 +145,9 @@ public class MensagemController {
     }
 
     @Operation(summary = "Curtir a mensagem", description = "Curte a mensagem ou descurte se o usuário já curtiu.")
-    @PostMapping("/{idUsuario}/{idMensagem}")
-    public boolean darLike(@PathVariable Integer idUsuario, @PathVariable String idMensagem) throws OPomboException {
-        return mensagemService.darLike(idUsuario, idMensagem);
+    @GetMapping("/curtir/{idMensagem}")
+    public boolean darLike(@PathVariable String idMensagem) throws OPomboException {
+        return mensagemService.darLike(idMensagem);
     }
 
     @Operation(summary = "Bloquear mensagem", description = "Bloqueia a mensagem de um usuário")
