@@ -16,7 +16,8 @@ import org.springframework.transaction.TransactionSystemException;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @ActiveProfiles("test")
 class UsuarioRepositoryTest {
@@ -37,6 +38,25 @@ class UsuarioRepositoryTest {
     @AfterEach
     public void tearDown() {
         usuarioRepository.deleteAll();
+    }
+
+    @Test
+    @DisplayName("Deve salvar um novo usuário com sucesso")
+    public void testInserirTodosCamposPreenchidos() {
+        Usuario usuario = new Usuario();
+        usuario.setNome("Usuario Teste");
+        usuario.setCpf("25310875085");
+        usuario.setEmail("usuario@email.com");
+        usuario.setSenha("senha123");
+        usuario.setPerfilAcesso(PerfilAcesso.GERAL);
+
+        Usuario usuarioSalvo = usuarioRepository.save(usuario);
+        assertThat(usuarioSalvo.getId()).isNotNull();
+        assertThat(usuarioSalvo.getNome()).isEqualTo("Usuario Teste");
+        assertThat(usuarioSalvo.getCpf()).isEqualTo("25310875085");
+        assertThat(usuarioSalvo.getEmail()).isEqualTo("usuario@email.com");
+        assertThat(usuarioSalvo.getSenha()).isEqualTo("senha123");
+        assertThat(usuarioSalvo.getPerfilAcesso()).isEqualTo(PerfilAcesso.GERAL);
     }
 
     @Test
@@ -82,4 +102,50 @@ class UsuarioRepositoryTest {
                 .isInstanceOf(ConstraintViolationException.class);
     }
 
+    @Test
+    @DisplayName("Deve lançar uma excessão pois o nome tem menos que 3 caracteres")
+    void deveFalharAoSalvarUsuarioComNomeMenorQue3Caracteres() {
+        Usuario usuario = new Usuario();
+        usuario.setCpf("26253943669");
+        usuario.setEmail("teste3caracteres@teste.com");
+        usuario.setSenha("senha123");
+        usuario.setNome("Jo");
+        usuario.setPerfilAcesso(PerfilAcesso.GERAL);
+
+        assertThrows(ConstraintViolationException.class, () -> {
+            usuarioRepository.saveAndFlush(usuario);
+        });
+    }
+
+    @Test
+    @DisplayName("Deve lançar uma excessão pois o nome tem mais que 100 caracteres")
+    void deveFalharAoSalvarUsuarioComNomeMaiorQue100Caracteres() {
+        Usuario usuario = new Usuario();
+        usuario.setCpf("30218552610");
+        usuario.setEmail("teste@teste.com");
+        usuario.setSenha("senha123");
+        usuario.setNome("Esse nome tem que ter mais de cem caracteres para não passar no teste de validação do nome portanto vou ficar enrolando aqui.");
+        usuario.setPerfilAcesso(PerfilAcesso.GERAL);
+
+        assertThrows(ConstraintViolationException.class, () -> {
+            usuarioRepository.saveAndFlush(usuario);
+        });
+    }
+
+    @Test
+    @DisplayName("Deve lançar uma excessão pois a senha está em branco")
+    void deveFalharAoSalvarUsuarioComSenhaEmBranco() {
+        // Dado
+        Usuario usuario = new Usuario();
+        usuario.setCpf("28201431057");
+        usuario.setEmail("testesenha@teste.com");
+        usuario.setSenha("");
+        usuario.setNome("Senha em branco");
+        usuario.setPerfilAcesso(PerfilAcesso.GERAL);
+
+
+        assertThrows(ConstraintViolationException.class, () -> {
+            usuarioRepository.saveAndFlush(usuario);
+        });
+    }
 }

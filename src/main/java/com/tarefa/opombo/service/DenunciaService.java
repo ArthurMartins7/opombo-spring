@@ -98,20 +98,20 @@ public class DenunciaService {
 
         List<Denuncia> denuncias = mensagem.getDenuncias();
         List<Denuncia> denunciasPendentes = new ArrayList<>();
-        List<Denuncia> denunciasAceitas = new ArrayList<>();
+        List<Denuncia> denunciasBloqueadas = new ArrayList<>();
         List<Denuncia> denunciasRejeitadas = new ArrayList<>();
 
         for (Denuncia denuncia : denuncias) {
             if (denuncia.getSituacao().equals(SituacaoDenuncia.PENDENTE)) {
                 denunciasPendentes.add(denuncia);
-            } else if (denuncia.getSituacao().equals(SituacaoDenuncia.ACEITA)) {
-                denunciasAceitas.add(denuncia);
+            } else if (denuncia.getSituacao().equals(SituacaoDenuncia.BLOQUEADA)) {
+                denunciasBloqueadas.add(denuncia);
             } else {
                 denunciasRejeitadas.add(denuncia);
             }
         }
 
-        DenunciaDTO denunciaDTO = Denuncia.toDTO(idMensagem, denuncias.size(), denunciasPendentes.size(), denunciasAceitas.size(), denunciasRejeitadas.size());
+        DenunciaDTO denunciaDTO = Denuncia.toDTO(idMensagem, denuncias.size(), denunciasPendentes.size(), denunciasBloqueadas.size(), denunciasRejeitadas.size());
         return denunciaDTO;
     }
 
@@ -123,7 +123,7 @@ public class DenunciaService {
         boolean aceita = false;
 
         if (denuncia.getSituacao().equals(SituacaoDenuncia.PENDENTE)) {
-            denuncia.setSituacao((SituacaoDenuncia.ACEITA));
+            denuncia.setSituacao((SituacaoDenuncia.BLOQUEADA));
             aceita = true;
             denunciaRepository.save(denuncia);
         } else {
