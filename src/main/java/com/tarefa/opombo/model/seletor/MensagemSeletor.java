@@ -17,6 +17,7 @@ import java.util.List;
 public class MensagemSeletor extends BaseSeletor implements Specification<Mensagem> {
 
     private Boolean bloqueado;
+    private String nomeUsuario;
     private String texto;
     private LocalDate dataInicialCriacao;
     private LocalDate dataFinalCriacao;
@@ -31,6 +32,10 @@ public class MensagemSeletor extends BaseSeletor implements Specification<Mensag
 
         if(this.getTexto() != null && !this.getTexto().trim().isEmpty()) {
             predicates.add(cb.like(root.get("texto"), "%" + this.getTexto() + "%"));
+        }
+
+        if (this.getNomeUsuario() != null && !this.getNomeUsuario().trim().isEmpty()) {
+            predicates.add(cb.like(root.get("usuario").get("nome"), "%" + this.getNomeUsuario() + "%"));
         }
 
         aplicarFiltroPeriodo(root, cb, predicates, this.getDataInicialCriacao(), this.getDataFinalCriacao(), "dataHoraCriacao");

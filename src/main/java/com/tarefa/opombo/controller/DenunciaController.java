@@ -78,4 +78,9 @@ public class DenunciaController {
         return denunciaService.rejeitarDenuncia(idDenuncia);
     }
 
+    @PostMapping("/total-paginas")
+    public int contarPaginas(@RequestBody DenunciaSeletor seletor) {
+        return this.denunciaService.contarPaginas(seletor);
+    }
+
 }

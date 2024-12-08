@@ -40,7 +40,7 @@ public class AuthenticationController {
 
     @PostMapping("/novo-usuario")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void registrarUsuario(@RequestBody Usuario novoUsuario) throws OPomboException {
+    public Usuario registrarUsuario(@RequestBody Usuario novoUsuario) throws OPomboException {
 
         String senhaCifrada = passwordEncoder.encode(novoUsuario.getSenha());
 
@@ -50,6 +50,8 @@ public class AuthenticationController {
             novoUsuario.setPerfilAcesso(PerfilAcesso.GERAL);
         }
         usuarioService.salvar(novoUsuario);
+
+        return novoUsuario;
     }
 
 }

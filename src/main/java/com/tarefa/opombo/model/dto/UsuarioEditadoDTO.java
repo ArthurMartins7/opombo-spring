@@ -20,21 +20,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class UsuarioEditadoDTO {
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private PerfilAcesso perfilAcesso;
+    @Column(columnDefinition = "LONGTEXT")
+    private String imagemEmBase64;
 
     @NotBlank(message = "O nome não pode ser vazio ou apenas espaços em branco.")
     private String nome;
-
-    @Email
-    @NotBlank(message = "O nome não pode ser vazio ou apenas espaços em branco.")
-    private String email;
-
-
-    @NotBlank(message = "A senha não pode ser vazio ou apenas espaços em branco.")
-    @Column(length = 4000)
-    private String senha;
 
     @CPF
     @NotBlank(message = "O CPF não pode ser vazio ou apenas espaços em branco.")

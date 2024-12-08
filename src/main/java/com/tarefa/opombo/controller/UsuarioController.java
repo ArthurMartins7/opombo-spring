@@ -53,7 +53,7 @@ public class UsuarioController {
             description = "Realiza o upload de uma imagem associada a um usuario específico."
     )
     @PostMapping("/{idUsuario}/upload")
-    public void fazerUploadCarta(@RequestParam("imagem") MultipartFile imagem,
+    public void fazerUploadImagemUsuario(@RequestParam("imagem") MultipartFile imagem,
                                  @PathVariable Integer idUsuario)
             throws OPomboException, IOException {
 
@@ -66,9 +66,9 @@ public class UsuarioController {
             throw new OPomboException("Usuário não encontrado");
         }
 
-        if (usuarioAutenticado.getPerfilAcesso() == PerfilAcesso.GERAL) {
-            throw new OPomboException("Usuário sem permissão de acesso");
-        }
+//        if (usuarioAutenticado.getPerfilAcesso() == PerfilAcesso.GERAL) {
+//            throw new OPomboException("Usuário sem permissão de acesso");
+//        }
 
         usuarioService.salvarImagemUsuario(imagem, idUsuario);
     }

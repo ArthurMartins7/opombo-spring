@@ -88,17 +88,19 @@ public class UsuarioService implements UserDetailsService {
     public Usuario alterar(int idUsuario, UsuarioEditadoDTO usuarioEditadoDTO) throws OPomboException {
         authorizationService.verifiarCredenciaisUsuario(idUsuario);
 
-        verificarCpfEmailJaUtilizados(usuarioEditadoDTO.getCpf(), usuarioEditadoDTO.getEmail(), idUsuario);
-
         Usuario usuarioEditado = usuarioRepository.findById(idUsuario).get();
 
-        String senhaCifrada = passwordEncoder.encode(usuarioEditadoDTO.getSenha());
+        verificarCpfEmailJaUtilizados(usuarioEditado.getCpf(), usuarioEditado.getEmail(), idUsuario);
 
-        usuarioEditado.setPerfilAcesso(usuarioEditadoDTO.getPerfilAcesso());
+        //String senhaCifrada = passwordEncoder.encode(usuarioEditadoDTO.getSenha());
+
+       // usuarioEditado.setPerfilAcesso(usuarioEditadoDTO.getPerfilAcesso());
         usuarioEditado.setNome(usuarioEditadoDTO.getNome());
-        usuarioEditado.setEmail(usuarioEditadoDTO.getEmail());
+        //usuarioEditado.setEmail(usuarioEditadoDTO.getEmail());
         usuarioEditado.setCpf(usuarioEditadoDTO.getCpf());
-        usuarioEditado.setSenha(senhaCifrada);
+       // usuarioEditado.setSenha(senhaCifrada);
+
+        usuarioEditado.setImagemEmBase64(usuarioEditadoDTO.getImagemEmBase64());
 
         LocalDateTime dateTime = LocalDateTime.now();
         usuarioEditado.setDataUltimaModificacao(dateTime);

@@ -15,6 +15,7 @@ import com.tarefa.opombo.model.seletor.DenunciaSeletor;
 import com.tarefa.opombo.model.seletor.MensagemSeletor;
 import com.tarefa.opombo.security.AuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -64,7 +65,7 @@ public class DenunciaService {
     }
 
     public Denuncia denunciar(Denuncia denuncia) throws OPomboException {
-        this.authorizationService.verificarPerfilAcesso();
+        //this.authorizationService.verificarPerfilAcesso();
 
         this.authorizationService.verifiarCredenciaisUsuario(denuncia.getDenunciante().getId());
 
@@ -147,6 +148,20 @@ public class DenunciaService {
             throw new OPomboException("A denúncia já foi analisada.");
         }
         return rejeitada;
+    }
+
+    public int contarPaginas(DenunciaSeletor seletor) {
+        if (seletor != null && seletor.temPaginacao()) {
+            int pageSize = seletor.getLimite();
+            PageRequest pagina = PageRequest.of(0, pageSize); // Página inicial apenas para contar
+
+            Page<Denuncia> paginaResultado = denunciaRepository.findAll(seletor, pagina);
+            return paginaResultado.getTotalPages(); // Retorna o número total de páginas
+        }
+
+        // Se não houver paginação, retorna 1 página se houver registros, ou 0 se não houver registros.
+        long totalRegistros = denunciaRepository.count(seletor);
+        return totalRegistros > 0 ? 1 : 0;
     }
 
 
