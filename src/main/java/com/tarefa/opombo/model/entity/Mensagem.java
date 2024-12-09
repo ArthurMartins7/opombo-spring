@@ -56,6 +56,8 @@ public class Mensagem {
     @Column(columnDefinition = "LONGTEXT")
     private String imagemEmBase64;
 
+    private boolean isDeleted = false;
+
     public static MensagemDTO toDTO(Mensagem mensagem, Integer quantidadeLikes, Integer quantidadeDenuncias) {
         return new MensagemDTO(
                 mensagem.getId(),

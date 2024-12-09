@@ -33,6 +33,7 @@ public class Denuncia {
     private MotivoDenuncia motivo;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 10)
     private SituacaoDenuncia situacao = SituacaoDenuncia.PENDENTE;
 
     @CreationTimestamp

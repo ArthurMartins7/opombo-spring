@@ -98,6 +98,11 @@ public class MensagemController {
         return mensagemService.buscarTodasMensagensPorIdUsuario(idUsuario);
     }
 
+    @GetMapping("/ativas")
+    public List<Mensagem> buscarTodasMensagensAtivas() {
+        return mensagemService.buscarTodasMensagensAtivas();
+    }
+
 
     @Operation(summary = "Relatório", description = "Busca um DTO (relatório de mensagem)")
     @GetMapping("/dto")
@@ -135,6 +140,12 @@ public class MensagemController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable String id) throws OPomboException {
         mensagemService.excluir(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/desativar/{idMensagem}")
+    public ResponseEntity<Void> marcarComoExcluida(@PathVariable String idMensagem) throws OPomboException {
+        mensagemService.marcarComoExcluida(idMensagem);
         return ResponseEntity.noContent().build();
     }
 

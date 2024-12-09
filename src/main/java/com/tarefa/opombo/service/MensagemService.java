@@ -89,6 +89,10 @@ public class MensagemService {
         return List.of();
     }
 
+    public List<Mensagem> buscarTodasMensagensAtivas() {
+        return this.mensagemRepository.findAllNotBlockedAndNotDeleted();
+    }
+
     public Mensagem salvar(Mensagem mensagem) throws OPomboException {
 
         Usuario usuario = usuarioRepository.findById(mensagem.getUsuario().getId()).orElseThrow(() -> new OPomboException("Usuário não encontrado."));
@@ -110,6 +114,16 @@ public class MensagemService {
         authorizationService.verifiarCredenciaisUsuario(mensagem.getUsuario().getId());
 
         mensagemRepository.deleteById(idMensagem);
+    }
+
+    public void marcarComoExcluida(String idMensagem) throws OPomboException {
+        Mensagem mensagem = mensagemRepository.findById(idMensagem).orElseThrow(() -> new OPomboException("Mensagem não encontrada"));
+
+        authorizationService.verifiarCredenciaisUsuario(mensagem.getUsuario().getId());
+
+        mensagem.setDeleted(true);
+
+        mensagemRepository.save(mensagem);
     }
 
     public List<Usuario> buscarUsuariosQueCurtiramAMensagem(String idMensagem) throws OPomboException {
